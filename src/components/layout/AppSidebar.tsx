@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -30,15 +31,15 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex flex-col w-64 bg-slate-900 text-white overflow-hidden">
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-800">
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-600 shrink-0">
+    <aside className="fixed inset-y-0 left-0 z-40 flex flex-col w-64 overflow-hidden" style={{ backgroundColor: "#003d24" }}>
+      {/* Logo / App header */}
+      <div className="flex items-center gap-3 px-5 py-5 border-b" style={{ borderColor: "#005230" }}>
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg shrink-0" style={{ backgroundColor: "#006B3F" }}>
           <ShieldCheck className="h-5 w-5 text-white" />
         </div>
         <div className="flex flex-col min-w-0">
           <span className="text-sm font-bold text-white leading-tight">SAMA ITGF</span>
-          <span className="text-xs text-slate-400 truncate">Compliance Advisor</span>
+          <span className="text-xs truncate" style={{ color: "#a7c4b0" }}>Compliance Advisor</span>
         </div>
       </div>
 
@@ -54,24 +55,44 @@ export function AppSidebar() {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors group",
                   isActive
-                    ? "bg-blue-700 text-white"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800"
+                    ? "text-white"
+                    : "hover:text-white"
                 )}
+                style={isActive
+                  ? { backgroundColor: "#006B3F" }
+                  : { color: "#a7c4b0" }
+                }
+                onMouseEnter={(e) => {
+                  if (!isActive) (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#005230";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent";
+                }}
               >
-                <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-white" : "text-slate-500 group-hover:text-slate-300")} />
+                <Icon className={cn("h-4 w-4 shrink-0")} style={{ color: isActive ? "#ffffff" : "#6ea882" }} />
                 <span className="flex-1">{label}</span>
-                {isActive && <ChevronRight className="h-3.5 w-3.5 text-blue-300" />}
+                {isActive && <ChevronRight className="h-3.5 w-3.5" style={{ color: "#86BC25" }} />}
               </Link>
             );
           })}
         </div>
       </nav>
 
-      {/* Footer */}
-      <div className="px-5 py-4 border-t border-slate-800">
-        <div className="text-xs text-slate-500">
-          <p className="font-medium text-slate-400">SAMA ITGF v2024</p>
-          <p className="mt-0.5">Saudi Arabian banking compliance framework advisor. Not legal or regulatory advice.</p>
+      {/* Deloitte branding footer */}
+      <div className="px-5 py-4 border-t" style={{ borderColor: "#005230" }}>
+        <div className="flex items-center gap-2 mb-2">
+          <Image
+            src="/deloitte-logo.png"
+            alt="Deloitte"
+            width={80}
+            height={45}
+            className="object-contain"
+            style={{ filter: "brightness(0) invert(1)" }}
+          />
+        </div>
+        <div className="text-xs" style={{ color: "#6ea882" }}>
+          <p className="font-medium" style={{ color: "#a7c4b0" }}>SAMA ITGF v1.0</p>
+          <p className="mt-0.5">Saudi Arabian banking IT governance framework advisor. Not legal or regulatory advice.</p>
         </div>
       </div>
     </aside>

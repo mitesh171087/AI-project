@@ -4,9 +4,9 @@ export const control338: Control = {
   id: "ctrl-338",
   controlNumber: "3.3.8",
   title: "IT Incident Management",
-  domain: "IT Operations",
+  domain: "Operations Management",
   domainId: "dom-33",
-  subdomain: "IT Operations Management",
+  subdomain: "Operations Management",
   subdomainId: "sub-338",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control338: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-338-1", name: "Incident Management Policy and Procedure", description: "Documented incident management process from detection to closure including SAMA notification requirements.", type: "Policy", owner: "IT Operations Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-338", domain: "IT Operations" },
-    { id: "ev-338-2", name: "Incident Classification and Escalation Matrix", description: "Severity levels, classification criteria, response SLAs, and escalation pathways.", type: "Document", owner: "IT Operations Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-338", domain: "IT Operations" },
-    { id: "ev-338-3", name: "ITSM Incident Records (Last 12 Months)", description: "Extract from ITSM tool showing all P1 and P2 incidents with classification, timeline, and resolution.", type: "Record", owner: "IT Operations Head", updateFrequency: "Ongoing", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-338", domain: "IT Operations" },
-    { id: "ev-338-4", name: "Post-Incident Review Reports", description: "PIR reports for all P1 and P2 incidents including RCA and remediation actions.", type: "Report", owner: "IT Operations Head", updateFrequency: "Per incident", maturityLevelSupported: 4, status: "Partial", controlId: "ctrl-338", domain: "IT Operations" },
-    { id: "ev-338-5", name: "SAMA Incident Notification Records", description: "Records of SAMA notifications for material incidents including notification letter and SAMA acknowledgement.", type: "Record", owner: "Compliance Officer", updateFrequency: "As required", maturityLevelSupported: 4, status: "Available", controlId: "ctrl-338", domain: "IT Operations" },
+    { id: "ev-338-1", name: "Incident Management Policy and Procedure", description: "Documented incident management process from detection to closure including SAMA notification requirements.", type: "Policy", owner: "IT Operations Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-338", domain: "Operations Management" },
+    { id: "ev-338-2", name: "Incident Classification and Escalation Matrix", description: "Severity levels, classification criteria, response SLAs, and escalation pathways.", type: "Document", owner: "IT Operations Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-338", domain: "Operations Management" },
+    { id: "ev-338-3", name: "ITSM Incident Records (Last 12 Months)", description: "Extract from ITSM tool showing all P1 and P2 incidents with classification, timeline, and resolution.", type: "Record", owner: "IT Operations Head", updateFrequency: "Ongoing", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-338", domain: "Operations Management" },
+    { id: "ev-338-4", name: "Post-Incident Review Reports", description: "PIR reports for all P1 and P2 incidents including RCA and remediation actions.", type: "Report", owner: "IT Operations Head", updateFrequency: "Per incident", maturityLevelSupported: 4, status: "Partial", controlId: "ctrl-338", domain: "Operations Management" },
+    { id: "ev-338-5", name: "SAMA Incident Notification Records", description: "Records of SAMA notifications for material incidents including notification letter and SAMA acknowledgement.", type: "Record", owner: "Compliance Officer", updateFrequency: "As required", maturityLevelSupported: 4, status: "Available", controlId: "ctrl-338", domain: "Operations Management" },
   ],
 
   maturityGuidance: [

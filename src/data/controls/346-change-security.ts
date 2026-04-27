@@ -4,9 +4,9 @@ export const control346: Control = {
   id: "ctrl-346",
   controlNumber: "3.4.6",
   title: "Change Security Requirements",
-  domain: "IT Project & Change Management",
+  domain: "System Change Management",
   domainId: "dom-34",
-  subdomain: "IT Change Management",
+  subdomain: "System Change Management",
   subdomainId: "sub-341",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control346: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-346-1", name: "Change Security Assessment Requirements Document", description: "Document defining security assessment requirements by change type.", type: "Document", owner: "CISO", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-346", domain: "IT Project & Change Management" },
-    { id: "ev-346-2", name: "Security Requirements Library", description: "Library of standard security requirements by change category.", type: "Document", owner: "CISO", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-346", domain: "IT Project & Change Management" },
-    { id: "ev-346-3", name: "Change Security Assessment Records", description: "Completed security assessments for recent Normal changes.", type: "Record", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-346", domain: "IT Project & Change Management" },
-    { id: "ev-346-4", name: "SAST and DAST Scan Reports", description: "Security scan reports for application changes showing findings and remediation status.", type: "Report", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-346", domain: "IT Project & Change Management" },
-    { id: "ev-346-5", name: "Security Finding Rejection/Acceptance Records", description: "Records of changes blocked or conditionally approved due to security findings.", type: "Record", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-346", domain: "IT Project & Change Management" },
+    { id: "ev-346-1", name: "Change Security Assessment Requirements Document", description: "Document defining security assessment requirements by change type.", type: "Document", owner: "CISO", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-346", domain: "System Change Management" },
+    { id: "ev-346-2", name: "Security Requirements Library", description: "Library of standard security requirements by change category.", type: "Document", owner: "CISO", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-346", domain: "System Change Management" },
+    { id: "ev-346-3", name: "Change Security Assessment Records", description: "Completed security assessments for recent Normal changes.", type: "Record", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-346", domain: "System Change Management" },
+    { id: "ev-346-4", name: "SAST and DAST Scan Reports", description: "Security scan reports for application changes showing findings and remediation status.", type: "Report", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-346", domain: "System Change Management" },
+    { id: "ev-346-5", name: "Security Finding Rejection/Acceptance Records", description: "Records of changes blocked or conditionally approved due to security findings.", type: "Record", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-346", domain: "System Change Management" },
   ],
 
   maturityGuidance: [

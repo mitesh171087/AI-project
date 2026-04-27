@@ -4,9 +4,9 @@ export const control312: Control = {
   id: "ctrl-312",
   controlNumber: "3.1.2",
   title: "Information Technology Strategy",
-  domain: "IT Governance",
+  domain: "Information Technology Governance and Leadership",
   domainId: "dom-31",
-  subdomain: "IT Governance Framework",
+  subdomain: "IT Governance and Leadership",
   subdomainId: "sub-311",
   priority: "P1",
   targetMaturity: 4,
@@ -197,11 +197,11 @@ export const control312: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-312-1", name: "IT Strategy Document (Board-Approved)", description: "3–5 year IT strategy covering digital, infrastructure, data, security, and workforce dimensions, signed by the Board.", type: "Document", owner: "CIO", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-312", domain: "IT Governance" },
-    { id: "ev-312-2", name: "Board Minutes Approving IT Strategy", description: "Board Technology Committee meeting minutes that formally approve the IT strategy.", type: "Minutes", owner: "Board Secretary", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-312", domain: "IT Governance" },
-    { id: "ev-312-3", name: "IT Strategy–Business Strategy Alignment Map", description: "Document or visual showing how each IT strategic initiative maps to a business objective.", type: "Document", owner: "Enterprise Architect", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-312", domain: "IT Governance" },
-    { id: "ev-312-4", name: "IT Strategy Execution Dashboard", description: "Quarterly reports or dashboard showing progress against IT strategy milestones.", type: "Report", owner: "PMO", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-312", domain: "IT Governance" },
-    { id: "ev-312-5", name: "Annual IT Strategy Review Report", description: "Annual review of strategy relevance, progress, and update record.", type: "Report", owner: "CIO", updateFrequency: "Annual", maturityLevelSupported: 5, status: "Missing", controlId: "ctrl-312", domain: "IT Governance" },
+    { id: "ev-312-1", name: "IT Strategy Document (Board-Approved)", description: "3–5 year IT strategy covering digital, infrastructure, data, security, and workforce dimensions, signed by the Board.", type: "Document", owner: "CIO", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-312", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-312-2", name: "Board Minutes Approving IT Strategy", description: "Board Technology Committee meeting minutes that formally approve the IT strategy.", type: "Minutes", owner: "Board Secretary", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-312", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-312-3", name: "IT Strategy–Business Strategy Alignment Map", description: "Document or visual showing how each IT strategic initiative maps to a business objective.", type: "Document", owner: "Enterprise Architect", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-312", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-312-4", name: "IT Strategy Execution Dashboard", description: "Quarterly reports or dashboard showing progress against IT strategy milestones.", type: "Report", owner: "PMO", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-312", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-312-5", name: "Annual IT Strategy Review Report", description: "Annual review of strategy relevance, progress, and update record.", type: "Report", owner: "CIO", updateFrequency: "Annual", maturityLevelSupported: 5, status: "Missing", controlId: "ctrl-312", domain: "Information Technology Governance and Leadership" },
   ],
 
   maturityGuidance: [

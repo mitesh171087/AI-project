@@ -4,9 +4,9 @@ export const control311: Control = {
   id: "ctrl-311",
   controlNumber: "3.1.1",
   title: "Information Technology Governance",
-  domain: "IT Governance",
+  domain: "Information Technology Governance and Leadership",
   domainId: "dom-31",
-  subdomain: "IT Governance Framework",
+  subdomain: "IT Governance and Leadership",
   subdomainId: "sub-311",
   priority: "P1",
   targetMaturity: 4,
@@ -216,7 +216,7 @@ export const control311: Control = {
       maturityLevelSupported: 3,
       status: "Available",
       controlId: "ctrl-311",
-      domain: "IT Governance",
+      domain: "Information Technology Governance and Leadership",
     },
     {
       id: "ev-311-2",
@@ -228,7 +228,7 @@ export const control311: Control = {
       maturityLevelSupported: 3,
       status: "Partial",
       controlId: "ctrl-311",
-      domain: "IT Governance",
+      domain: "Information Technology Governance and Leadership",
     },
     {
       id: "ev-311-3",
@@ -240,7 +240,7 @@ export const control311: Control = {
       maturityLevelSupported: 4,
       status: "Partial",
       controlId: "ctrl-311",
-      domain: "IT Governance",
+      domain: "Information Technology Governance and Leadership",
     },
     {
       id: "ev-311-4",
@@ -252,7 +252,7 @@ export const control311: Control = {
       maturityLevelSupported: 4,
       status: "Missing",
       controlId: "ctrl-311",
-      domain: "IT Governance",
+      domain: "Information Technology Governance and Leadership",
     },
     {
       id: "ev-311-5",
@@ -264,7 +264,7 @@ export const control311: Control = {
       maturityLevelSupported: 5,
       status: "Missing",
       controlId: "ctrl-311",
-      domain: "IT Governance",
+      domain: "Information Technology Governance and Leadership",
     },
   ],
 

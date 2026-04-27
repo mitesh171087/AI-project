@@ -4,9 +4,9 @@ export const control334: Control = {
   id: "ctrl-334",
   controlNumber: "3.3.4",
   title: "IT Availability and Capacity Management",
-  domain: "IT Operations",
+  domain: "Operations Management",
   domainId: "dom-33",
-  subdomain: "IT Operations Management",
+  subdomain: "Operations Management",
   subdomainId: "sub-334",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control334: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-334-1", name: "IT Availability SLA Documents", description: "Formal SLA documents for critical IT systems showing agreed availability targets.", type: "Document", owner: "IT Operations Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-334", domain: "IT Operations" },
-    { id: "ev-334-2", name: "Monthly Availability Reports (Last 12 Months)", description: "Monthly availability performance reports showing actual vs SLA performance.", type: "Report", owner: "IT Operations Head", updateFrequency: "Monthly", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-334", domain: "IT Operations" },
-    { id: "ev-334-3", name: "Quarterly Capacity Plans", description: "Quarterly capacity plans showing utilisation trends and provisioning actions.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-334", domain: "IT Operations" },
-    { id: "ev-334-4", name: "Monitoring Platform Configuration", description: "Documentation and screenshots showing the monitoring platform configuration and alert thresholds.", type: "Screenshot", owner: "Infrastructure Owner", updateFrequency: "As required", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-334", domain: "IT Operations" },
-    { id: "ev-334-5", name: "Capacity Trend Reports", description: "Quarterly reports showing capacity utilisation trends and forecasts for all critical systems.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-334", domain: "IT Operations" },
+    { id: "ev-334-1", name: "IT Availability SLA Documents", description: "Formal SLA documents for critical IT systems showing agreed availability targets.", type: "Document", owner: "IT Operations Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-334", domain: "Operations Management" },
+    { id: "ev-334-2", name: "Monthly Availability Reports (Last 12 Months)", description: "Monthly availability performance reports showing actual vs SLA performance.", type: "Report", owner: "IT Operations Head", updateFrequency: "Monthly", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-334", domain: "Operations Management" },
+    { id: "ev-334-3", name: "Quarterly Capacity Plans", description: "Quarterly capacity plans showing utilisation trends and provisioning actions.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-334", domain: "Operations Management" },
+    { id: "ev-334-4", name: "Monitoring Platform Configuration", description: "Documentation and screenshots showing the monitoring platform configuration and alert thresholds.", type: "Screenshot", owner: "Infrastructure Owner", updateFrequency: "As required", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-334", domain: "Operations Management" },
+    { id: "ev-334-5", name: "Capacity Trend Reports", description: "Quarterly reports showing capacity utilisation trends and forecasts for all critical systems.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-334", domain: "Operations Management" },
   ],
 
   maturityGuidance: [

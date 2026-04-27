@@ -30,12 +30,12 @@ export function ControlCard({ control, compact = false }: ControlCardProps) {
 
   return (
     <Link href={`/framework/${control.id}`}>
-      <Card className="hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group h-full">
+      <Card className="hover:shadow-md hover:border-green-200 transition-all cursor-pointer group h-full">
         <CardContent className="p-4 flex flex-col gap-3 h-full">
           <div className="flex items-start justify-between gap-2">
             <div className="flex flex-col gap-1 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded" style={{ color: "#006B3F", backgroundColor: "#e8f5ee" }}>
                   {control.controlNumber}
                 </span>
                 <PriorityBadge priority={control.priority} />
@@ -50,11 +50,11 @@ export function ControlCard({ control, compact = false }: ControlCardProps) {
                   </span>
                 )}
               </div>
-              <h3 className="text-sm font-semibold text-slate-900 leading-snug group-hover:text-blue-700 transition-colors line-clamp-2">
+              <h3 className="text-sm font-semibold text-slate-900 leading-snug transition-colors line-clamp-2">
                 {control.title}
               </h3>
             </div>
-            <ArrowRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 shrink-0 mt-1 transition-colors" />
+            <ArrowRight className="h-4 w-4 text-slate-300 shrink-0 mt-1 transition-colors" />
           </div>
 
           {!compact && (

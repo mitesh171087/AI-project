@@ -4,9 +4,9 @@ export const control314: Control = {
   id: "ctrl-314",
   controlNumber: "3.1.4",
   title: "IT Policy and Procedures",
-  domain: "IT Governance",
+  domain: "Information Technology Governance and Leadership",
   domainId: "dom-31",
-  subdomain: "IT Governance Framework",
+  subdomain: "IT Governance and Leadership",
   subdomainId: "sub-311",
   priority: "P1",
   targetMaturity: 4,
@@ -197,11 +197,11 @@ export const control314: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-314-1", name: "IT Policy Register", description: "Centralised list of all IT policies with version, owner, approval date, and review date.", type: "Document", owner: "IT Governance Head", updateFrequency: "Ongoing", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-314", domain: "IT Governance" },
-    { id: "ev-314-2", name: "Individual IT Policy Documents", description: "Full set of approved IT policies (security, change, access, backup, incident, etc.).", type: "Policy", owner: "IT Domain Owners", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-314", domain: "IT Governance" },
-    { id: "ev-314-3", name: "Policy Acknowledgement Records", description: "Evidence that staff have read and acknowledged applicable IT policies.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-314", domain: "IT Governance" },
-    { id: "ev-314-4", name: "Policy Exception Register", description: "Log of all active and historic policy exceptions with approval records.", type: "Record", owner: "IT Risk Manager", updateFrequency: "Ongoing", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-314", domain: "IT Governance" },
-    { id: "ev-314-5", name: "Annual Policy Review Records", description: "Evidence that each policy was reviewed on schedule, updated where needed, and re-approved.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-314", domain: "IT Governance" },
+    { id: "ev-314-1", name: "IT Policy Register", description: "Centralised list of all IT policies with version, owner, approval date, and review date.", type: "Document", owner: "IT Governance Head", updateFrequency: "Ongoing", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-314", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-314-2", name: "Individual IT Policy Documents", description: "Full set of approved IT policies (security, change, access, backup, incident, etc.).", type: "Policy", owner: "IT Domain Owners", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-314", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-314-3", name: "Policy Acknowledgement Records", description: "Evidence that staff have read and acknowledged applicable IT policies.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-314", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-314-4", name: "Policy Exception Register", description: "Log of all active and historic policy exceptions with approval records.", type: "Record", owner: "IT Risk Manager", updateFrequency: "Ongoing", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-314", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-314-5", name: "Annual Policy Review Records", description: "Evidence that each policy was reviewed on schedule, updated where needed, and re-approved.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-314", domain: "Information Technology Governance and Leadership" },
   ],
 
   maturityGuidance: [

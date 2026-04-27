@@ -102,7 +102,7 @@ export default function FrameworkPage() {
                 <Flame className="h-3.5 w-3.5 text-orange-500" />Criticality (your settings)
               </label>
               <select
-                className="text-sm border border-slate-200 rounded px-2 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                className="text-sm border border-slate-200 rounded px-2 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-green-600"
                 value={criticalityFilter}
                 onChange={(e) => setCriticalityFilter(e.target.value as Criticality | "")}
               >

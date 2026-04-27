@@ -4,9 +4,9 @@ export const control342: Control = {
   id: "ctrl-342",
   controlNumber: "3.4.2",
   title: "Change Requirement Definition and Approval",
-  domain: "IT Project & Change Management",
+  domain: "System Change Management",
   domainId: "dom-34",
-  subdomain: "IT Change Management",
+  subdomain: "System Change Management",
   subdomainId: "sub-341",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control342: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-342-1", name: "Change Requirement Template", description: "Standard template for capturing all change requirement dimensions.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-342", domain: "IT Project & Change Management" },
-    { id: "ev-342-2", name: "Completed Change Requirement Documents", description: "Sample completed requirement documents for recent significant changes.", type: "Document", owner: "Application Owner", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-342", domain: "IT Project & Change Management" },
-    { id: "ev-342-3", name: "Requirement Approval Records", description: "Sign-off records showing multi-stakeholder approval of change requirements.", type: "Record", owner: "IT Governance Head", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-342", domain: "IT Project & Change Management" },
-    { id: "ev-342-4", name: "Change Impact Assessments", description: "Completed impact assessments for Normal changes showing dependency analysis.", type: "Document", owner: "Enterprise Architect", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-342", domain: "IT Project & Change Management" },
-    { id: "ev-342-5", name: "Approval Authority Matrix", description: "Document defining who approves requirements for each change type and size.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-342", domain: "IT Project & Change Management" },
+    { id: "ev-342-1", name: "Change Requirement Template", description: "Standard template for capturing all change requirement dimensions.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-342", domain: "System Change Management" },
+    { id: "ev-342-2", name: "Completed Change Requirement Documents", description: "Sample completed requirement documents for recent significant changes.", type: "Document", owner: "Application Owner", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-342", domain: "System Change Management" },
+    { id: "ev-342-3", name: "Requirement Approval Records", description: "Sign-off records showing multi-stakeholder approval of change requirements.", type: "Record", owner: "IT Governance Head", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-342", domain: "System Change Management" },
+    { id: "ev-342-4", name: "Change Impact Assessments", description: "Completed impact assessments for Normal changes showing dependency analysis.", type: "Document", owner: "Enterprise Architect", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-342", domain: "System Change Management" },
+    { id: "ev-342-5", name: "Approval Authority Matrix", description: "Document defining who approves requirements for each change type and size.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-342", domain: "System Change Management" },
   ],
 
   maturityGuidance: [

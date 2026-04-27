@@ -4,9 +4,9 @@ export const control315: Control = {
   id: "ctrl-315",
   controlNumber: "3.1.5",
   title: "Roles and Responsibilities",
-  domain: "IT Governance",
+  domain: "Information Technology Governance and Leadership",
   domainId: "dom-31",
-  subdomain: "IT Governance Framework",
+  subdomain: "IT Governance and Leadership",
   subdomainId: "sub-311",
   priority: "P1",
   targetMaturity: 4,
@@ -197,11 +197,11 @@ export const control315: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-315-1", name: "IT Organisational Chart", description: "Current IT org chart showing all functions, roles, and reporting lines, approved by the CIO.", type: "Document", owner: "CIO", updateFrequency: "As required", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-315", domain: "IT Governance" },
-    { id: "ev-315-2", name: "IT RACI Framework Document", description: "Comprehensive RACI matrices for all material IT activities.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-315", domain: "IT Governance" },
-    { id: "ev-315-3", name: "IT Job Descriptions Library", description: "Current job descriptions for all IT roles with clear accountability statements.", type: "Document", owner: "CIO", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-315", domain: "IT Governance" },
-    { id: "ev-315-4", name: "Segregation of Duties Matrix", description: "Matrix identifying conflicting IT roles and the controls enforcing SoD.", type: "Document", owner: "CISO", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-315", domain: "IT Governance" },
-    { id: "ev-315-5", name: "Role Communication Records", description: "Evidence that roles and responsibilities have been communicated to all relevant IT staff.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-315", domain: "IT Governance" },
+    { id: "ev-315-1", name: "IT Organisational Chart", description: "Current IT org chart showing all functions, roles, and reporting lines, approved by the CIO.", type: "Document", owner: "CIO", updateFrequency: "As required", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-315", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-315-2", name: "IT RACI Framework Document", description: "Comprehensive RACI matrices for all material IT activities.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-315", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-315-3", name: "IT Job Descriptions Library", description: "Current job descriptions for all IT roles with clear accountability statements.", type: "Document", owner: "CIO", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-315", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-315-4", name: "Segregation of Duties Matrix", description: "Matrix identifying conflicting IT roles and the controls enforcing SoD.", type: "Document", owner: "CISO", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-315", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-315-5", name: "Role Communication Records", description: "Evidence that roles and responsibilities have been communicated to all relevant IT staff.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-315", domain: "Information Technology Governance and Leadership" },
   ],
 
   maturityGuidance: [

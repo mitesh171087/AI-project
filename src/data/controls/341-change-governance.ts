@@ -4,9 +4,9 @@ export const control341: Control = {
   id: "ctrl-341",
   controlNumber: "3.4.1",
   title: "System Change Governance",
-  domain: "IT Project & Change Management",
+  domain: "System Change Management",
   domainId: "dom-34",
-  subdomain: "IT Change Management",
+  subdomain: "System Change Management",
   subdomainId: "sub-341",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control341: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-341-1", name: "Change Management Policy", description: "Formal policy covering change classification, approval, CAB governance, and emergency change process.", type: "Policy", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-341", domain: "IT Project & Change Management" },
-    { id: "ev-341-2", name: "CAB Terms of Reference", description: "Formal CAB charter including membership, frequency, quorum, and decision authority.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-341", domain: "IT Project & Change Management" },
-    { id: "ev-341-3", name: "CAB Meeting Minutes (Last 12 Weeks)", description: "Signed CAB minutes showing changes reviewed, approved, rejected, or conditioned.", type: "Minutes", owner: "IT Governance Head", updateFrequency: "Weekly", maturityLevelSupported: 4, status: "Partial", controlId: "ctrl-341", domain: "IT Project & Change Management" },
-    { id: "ev-341-4", name: "ITSM Change Records Extract", description: "Extract showing all changes by type, status, approver, and outcome.", type: "Record", owner: "IT Governance Head", updateFrequency: "Ongoing", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-341", domain: "IT Project & Change Management" },
-    { id: "ev-341-5", name: "Emergency Change Register", description: "Register of all emergency changes with post-implementation review status.", type: "Record", owner: "IT Governance Head", updateFrequency: "Ongoing", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-341", domain: "IT Project & Change Management" },
+    { id: "ev-341-1", name: "Change Management Policy", description: "Formal policy covering change classification, approval, CAB governance, and emergency change process.", type: "Policy", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-341", domain: "System Change Management" },
+    { id: "ev-341-2", name: "CAB Terms of Reference", description: "Formal CAB charter including membership, frequency, quorum, and decision authority.", type: "Document", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-341", domain: "System Change Management" },
+    { id: "ev-341-3", name: "CAB Meeting Minutes (Last 12 Weeks)", description: "Signed CAB minutes showing changes reviewed, approved, rejected, or conditioned.", type: "Minutes", owner: "IT Governance Head", updateFrequency: "Weekly", maturityLevelSupported: 4, status: "Partial", controlId: "ctrl-341", domain: "System Change Management" },
+    { id: "ev-341-4", name: "ITSM Change Records Extract", description: "Extract showing all changes by type, status, approver, and outcome.", type: "Record", owner: "IT Governance Head", updateFrequency: "Ongoing", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-341", domain: "System Change Management" },
+    { id: "ev-341-5", name: "Emergency Change Register", description: "Register of all emergency changes with post-implementation review status.", type: "Record", owner: "IT Governance Head", updateFrequency: "Ongoing", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-341", domain: "System Change Management" },
   ],
 
   maturityGuidance: [

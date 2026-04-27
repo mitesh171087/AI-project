@@ -3,16 +3,22 @@
 // Future: Replace with API calls to backend / database
 // ============================================================
 
+// Domain 3.1 – Information Technology Governance and Leadership
 import { control311 } from "./controls/311-it-governance";
 import { control312 } from "./controls/312-it-strategy";
 import { control313 } from "./controls/313-it-budgeting";
 import { control314 } from "./controls/314-it-policy";
 import { control315 } from "./controls/315-roles-responsibilities";
 import { control316 } from "./controls/316-regulatory-compliance";
+import { control317 } from "./controls/317-internal-it-audit";
+import { control318 } from "./controls/318-staff-competence-training";
+import { control319 } from "./controls/319-performance-management";
+// Domain 3.2 – IT Risk Management
 import { control321 } from "./controls/321-managing-it-risks";
 import { control322 } from "./controls/322-risk-identification";
 import { control323 } from "./controls/323-risk-treatment";
 import { control324 } from "./controls/324-risk-reporting";
+// Domain 3.3 – Operations Management
 import { control331 } from "./controls/331-it-service-management";
 import { control332 } from "./controls/332-it-asset-management";
 import { control333 } from "./controls/333-configuration-management";
@@ -23,6 +29,8 @@ import { control337 } from "./controls/337-service-level-management";
 import { control338 } from "./controls/338-incident-management";
 import { control339 } from "./controls/339-event-log-monitoring";
 import { control3310 } from "./controls/3310-backup-recovery";
+import { control3311 } from "./controls/3311-virtualization";
+// Domain 3.4 – System Change Management
 import { control341 } from "./controls/341-change-governance";
 import { control342 } from "./controls/342-change-requirement";
 import { control343 } from "./controls/343-system-development";
@@ -32,31 +40,30 @@ import { control346 } from "./controls/346-change-security";
 import { control347 } from "./controls/347-release-management";
 import { control348 } from "./controls/348-it-project-management";
 import { control349 } from "./controls/349-patch-management";
-import { control351 } from "./controls/351-it-workforce-planning";
-import { control352 } from "./controls/352-it-training-awareness";
-import { control353 } from "./controls/353-it-performance-management";
-import { control361 } from "./controls/361-vendor-risk-management";
-import { control362 } from "./controls/362-third-party-contracts";
-import { control363 } from "./controls/363-cloud-outsourcing";
+import { control3410 } from "./controls/3410-it-project-management";
+import { control3411 } from "./controls/3411-quality-assurance";
 import type { Control, Domain, Subdomain, EvidenceItem } from "@/types";
 
 // ─────────────────────────────────────────────
-// All controls
+// All controls (35 total, matching official SAMA ITGF v1.0)
 // ─────────────────────────────────────────────
 export const allControls: Control[] = [
-  // Domain 3.1 – IT Governance
+  // Domain 3.1 – Information Technology Governance and Leadership (9 controls)
   control311,
   control312,
   control313,
   control314,
   control315,
   control316,
-  // Domain 3.2 – IT Risk Management
+  control317,
+  control318,
+  control319,
+  // Domain 3.2 – IT Risk Management (4 controls)
   control321,
   control322,
   control323,
   control324,
-  // Domain 3.3 – IT Operations
+  // Domain 3.3 – Operations Management (11 controls)
   control331,
   control332,
   control333,
@@ -67,7 +74,8 @@ export const allControls: Control[] = [
   control338,
   control339,
   control3310,
-  // Domain 3.4 – IT Project & Change Management
+  control3311,
+  // Domain 3.4 – System Change Management (11 controls)
   control341,
   control342,
   control343,
@@ -77,14 +85,8 @@ export const allControls: Control[] = [
   control347,
   control348,
   control349,
-  // Domain 3.5 – IT Human Capital
-  control351,
-  control352,
-  control353,
-  // Domain 3.6 – Third Party Management
-  control361,
-  control362,
-  control363,
+  control3410,
+  control3411,
 ];
 
 export const getControlById = (id: string): Control | undefined =>
@@ -94,20 +96,20 @@ export const getControlByNumber = (num: string): Control | undefined =>
   allControls.find((c) => c.controlNumber === num);
 
 // ─────────────────────────────────────────────
-// Domains & Subdomains
+// Domains & Subdomains (4 official SAMA ITGF domains)
 // ─────────────────────────────────────────────
 export const domains: Domain[] = [
   {
     id: "dom-31",
-    name: "IT Governance",
-    description: "Establishes the governance structures, strategies, policies, roles, budgeting, and regulatory compliance obligations for IT management across the bank.",
+    name: "Information Technology Governance and Leadership",
+    description: "Establishes the governance structures, strategies, enterprise architecture, policies, roles, audit, staff competence, and performance management for IT across the bank.",
     subdomains: [
       {
         id: "sub-311",
         domainId: "dom-31",
-        name: "IT Governance Framework",
-        description: "Core governance framework components including governance structure, strategy, budgeting, policies, roles, and regulatory compliance.",
-        controls: ["ctrl-311", "ctrl-312", "ctrl-313", "ctrl-314", "ctrl-315", "ctrl-316"],
+        name: "IT Governance and Leadership",
+        description: "Core governance and leadership components including governance structure, strategy, enterprise architecture, policies, roles, regulatory compliance, internal audit, staff competence, and performance management.",
+        controls: ["ctrl-311", "ctrl-312", "ctrl-313", "ctrl-314", "ctrl-315", "ctrl-316", "ctrl-317", "ctrl-318", "ctrl-319"],
       },
     ],
   },
@@ -127,64 +129,29 @@ export const domains: Domain[] = [
   },
   {
     id: "dom-33",
-    name: "IT Operations",
-    description: "Governs the operational management of IT services including service management, asset management, configuration, availability, incidents, continuity, and security monitoring.",
+    name: "Operations Management",
+    description: "Governs the operational management of IT services including asset management, interdependencies, service levels, availability, data center, network, batch processing, incidents, problem management, backup, and virtualisation.",
     subdomains: [
       {
         id: "sub-331",
         domainId: "dom-33",
-        name: "IT Service Management",
-        description: "Service management framework, asset management, configuration management, service levels, and problem management.",
-        controls: ["ctrl-331", "ctrl-332", "ctrl-333", "ctrl-335", "ctrl-337"],
-      },
-      {
-        id: "sub-334",
-        domainId: "dom-33",
-        name: "IT Operations Management",
-        description: "Operational management of IT systems including availability, capacity, continuity, incident, event monitoring, and backup management.",
-        controls: ["ctrl-334", "ctrl-336", "ctrl-338", "ctrl-339", "ctrl-3310"],
+        name: "Operations Management",
+        description: "End-to-end operational management covering assets, interdependencies, SLAs, availability/capacity, data center, network, batch processing, incident management, problem management, backup, and virtualisation.",
+        controls: ["ctrl-331", "ctrl-332", "ctrl-333", "ctrl-334", "ctrl-335", "ctrl-336", "ctrl-337", "ctrl-338", "ctrl-339", "ctrl-3310", "ctrl-3311"],
       },
     ],
   },
   {
     id: "dom-34",
-    name: "IT Project & Change Management",
-    description: "Governs how IT changes and projects are planned, approved, developed, acquired, tested, released, and managed.",
+    name: "System Change Management",
+    description: "Governs how IT changes and systems are governed, acquired, developed, tested, secured, released, configured, patched, managed as projects, and quality assured.",
     subdomains: [
       {
         id: "sub-341",
         domainId: "dom-34",
-        name: "IT Change Management",
-        description: "End-to-end governance of IT changes from governance framework through to patch management, including SDLC, acquisition, and project management.",
-        controls: ["ctrl-341", "ctrl-342", "ctrl-343", "ctrl-344", "ctrl-345", "ctrl-346", "ctrl-347", "ctrl-348", "ctrl-349"],
-      },
-    ],
-  },
-  {
-    id: "dom-35",
-    name: "IT Human Capital",
-    description: "Governs IT workforce planning, training and awareness, and performance management to ensure the bank has the skilled and accountable IT staff needed to meet its technology obligations.",
-    subdomains: [
-      {
-        id: "sub-351",
-        domainId: "dom-35",
-        name: "IT Human Capital Management",
-        description: "IT workforce planning, training, security awareness, and performance management.",
-        controls: ["ctrl-351", "ctrl-352", "ctrl-353"],
-      },
-    ],
-  },
-  {
-    id: "dom-36",
-    name: "Third Party Management",
-    description: "Governs the risk management, contractual governance, and oversight of all third-party IT vendors, service providers, and cloud arrangements.",
-    subdomains: [
-      {
-        id: "sub-361",
-        domainId: "dom-36",
-        name: "Third Party Governance",
-        description: "Vendor risk management, contract standards, and cloud and outsourcing governance.",
-        controls: ["ctrl-361", "ctrl-362", "ctrl-363"],
+        name: "System Change Management",
+        description: "End-to-end governance of IT changes and system development from change governance through to quality assurance.",
+        controls: ["ctrl-341", "ctrl-342", "ctrl-343", "ctrl-344", "ctrl-345", "ctrl-346", "ctrl-347", "ctrl-348", "ctrl-349", "ctrl-3410", "ctrl-3411"],
       },
     ],
   },

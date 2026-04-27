@@ -36,7 +36,7 @@ export function AppHeader({ title, subtitle, actions }: AppHeaderProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search controls, evidence, audit questions…"
-            className="pl-9 pr-4 h-8 w-72 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50"
+            className="pl-9 pr-4 h-8 w-72 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent bg-slate-50"
           />
         </form>
 

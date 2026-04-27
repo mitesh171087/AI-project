@@ -4,9 +4,9 @@ export const control347: Control = {
   id: "ctrl-347",
   controlNumber: "3.4.7",
   title: "Change Release Management",
-  domain: "IT Project & Change Management",
+  domain: "System Change Management",
   domainId: "dom-34",
-  subdomain: "IT Change Management",
+  subdomain: "System Change Management",
   subdomainId: "sub-341",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control347: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-347-1", name: "Release Management Policy", description: "Policy defining release windows, scheduling process, back-out requirements, and post-release verification.", type: "Policy", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-347", domain: "IT Project & Change Management" },
-    { id: "ev-347-2", name: "Release Calendar (Last 12 Months)", description: "Release schedule showing all planned and completed releases with approval status.", type: "Record", owner: "IT Governance Head", updateFrequency: "Rolling", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-347", domain: "IT Project & Change Management" },
-    { id: "ev-347-3", name: "Back-out Procedures for Recent Releases", description: "Sample back-out procedures for recent Normal releases.", type: "Document", owner: "IT Operations Head", updateFrequency: "Per release", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-347", domain: "IT Project & Change Management" },
-    { id: "ev-347-4", name: "Post-Release Verification Records", description: "Completed PRV records for releases showing system health confirmation.", type: "Record", owner: "IT Operations Head", updateFrequency: "Per release", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-347", domain: "IT Project & Change Management" },
-    { id: "ev-347-5", name: "CI/CD Pipeline Deployment Logs", description: "Automated deployment logs showing release package, deployment timestamp, and result.", type: "Log", owner: "CTO", updateFrequency: "Per release", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-347", domain: "IT Project & Change Management" },
+    { id: "ev-347-1", name: "Release Management Policy", description: "Policy defining release windows, scheduling process, back-out requirements, and post-release verification.", type: "Policy", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-347", domain: "System Change Management" },
+    { id: "ev-347-2", name: "Release Calendar (Last 12 Months)", description: "Release schedule showing all planned and completed releases with approval status.", type: "Record", owner: "IT Governance Head", updateFrequency: "Rolling", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-347", domain: "System Change Management" },
+    { id: "ev-347-3", name: "Back-out Procedures for Recent Releases", description: "Sample back-out procedures for recent Normal releases.", type: "Document", owner: "IT Operations Head", updateFrequency: "Per release", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-347", domain: "System Change Management" },
+    { id: "ev-347-4", name: "Post-Release Verification Records", description: "Completed PRV records for releases showing system health confirmation.", type: "Record", owner: "IT Operations Head", updateFrequency: "Per release", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-347", domain: "System Change Management" },
+    { id: "ev-347-5", name: "CI/CD Pipeline Deployment Logs", description: "Automated deployment logs showing release package, deployment timestamp, and result.", type: "Log", owner: "CTO", updateFrequency: "Per release", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-347", domain: "System Change Management" },
   ],
 
   maturityGuidance: [

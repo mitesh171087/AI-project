@@ -4,9 +4,9 @@ export const control349: Control = {
   id: "ctrl-349",
   controlNumber: "3.4.9",
   title: "Patch Management",
-  domain: "IT Project & Change Management",
+  domain: "System Change Management",
   domainId: "dom-34",
-  subdomain: "IT Change Management",
+  subdomain: "System Change Management",
   subdomainId: "sub-341",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control349: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-349-1", name: "Patch Management Policy", description: "Policy defining patch categories, SLAs by severity, exemption process, and compliance reporting.", type: "Policy", owner: "Infrastructure Owner", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-349", domain: "IT Project & Change Management" },
-    { id: "ev-349-2", name: "Monthly Patch Compliance Reports", description: "Monthly reports showing patch compliance rates by system and severity.", type: "Report", owner: "CISO", updateFrequency: "Monthly", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-349", domain: "IT Project & Change Management" },
-    { id: "ev-349-3", name: "Vulnerability Scan Reports (Last 3 Months)", description: "Automated vulnerability scan results showing identified missing patches.", type: "Report", owner: "CISO", updateFrequency: "Weekly", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-349", domain: "IT Project & Change Management" },
-    { id: "ev-349-4", name: "Patch Deployment Records", description: "Records from patch deployment tool showing which patches were applied to which systems and when.", type: "Log", owner: "Infrastructure Owner", updateFrequency: "Monthly", maturityLevelSupported: 4, status: "Available", controlId: "ctrl-349", domain: "IT Project & Change Management" },
-    { id: "ev-349-5", name: "Patch Exemption Register", description: "Register of approved patch exemptions with compensating controls and review dates.", type: "Record", owner: "CISO", updateFrequency: "Monthly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-349", domain: "IT Project & Change Management" },
+    { id: "ev-349-1", name: "Patch Management Policy", description: "Policy defining patch categories, SLAs by severity, exemption process, and compliance reporting.", type: "Policy", owner: "Infrastructure Owner", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-349", domain: "System Change Management" },
+    { id: "ev-349-2", name: "Monthly Patch Compliance Reports", description: "Monthly reports showing patch compliance rates by system and severity.", type: "Report", owner: "CISO", updateFrequency: "Monthly", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-349", domain: "System Change Management" },
+    { id: "ev-349-3", name: "Vulnerability Scan Reports (Last 3 Months)", description: "Automated vulnerability scan results showing identified missing patches.", type: "Report", owner: "CISO", updateFrequency: "Weekly", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-349", domain: "System Change Management" },
+    { id: "ev-349-4", name: "Patch Deployment Records", description: "Records from patch deployment tool showing which patches were applied to which systems and when.", type: "Log", owner: "Infrastructure Owner", updateFrequency: "Monthly", maturityLevelSupported: 4, status: "Available", controlId: "ctrl-349", domain: "System Change Management" },
+    { id: "ev-349-5", name: "Patch Exemption Register", description: "Register of approved patch exemptions with compensating controls and review dates.", type: "Record", owner: "CISO", updateFrequency: "Monthly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-349", domain: "System Change Management" },
   ],
 
   maturityGuidance: [

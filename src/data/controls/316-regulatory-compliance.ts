@@ -4,9 +4,9 @@ export const control316: Control = {
   id: "ctrl-316",
   controlNumber: "3.1.6",
   title: "Regulatory Compliance",
-  domain: "IT Governance",
+  domain: "Information Technology Governance and Leadership",
   domainId: "dom-31",
-  subdomain: "IT Governance Framework",
+  subdomain: "IT Governance and Leadership",
   subdomainId: "sub-311",
   priority: "P1",
   targetMaturity: 4,
@@ -197,11 +197,11 @@ export const control316: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-316-1", name: "SAMA Regulatory Compliance Register", description: "Register mapping all SAMA IT regulations to compliance status, gaps, and remediation actions.", type: "Record", owner: "Compliance Officer", updateFrequency: "Quarterly", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-316", domain: "IT Governance" },
-    { id: "ev-316-2", name: "Regulatory Compliance Board Reports", description: "Quarterly reports to the Board Technology Committee on SAMA compliance status.", type: "Report", owner: "Compliance Officer", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-316", domain: "IT Governance" },
-    { id: "ev-316-3", name: "Regulatory Watch Records", description: "Evidence of monitoring new SAMA circulars and assessing their impact.", type: "Record", owner: "Compliance Officer", updateFrequency: "Ongoing", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-316", domain: "IT Governance" },
-    { id: "ev-316-4", name: "Regulatory Breach Notification Records", description: "Records of any SAMA breach notifications including the notification itself and SAMA's acknowledgement.", type: "Record", owner: "Compliance Officer", updateFrequency: "As required", maturityLevelSupported: 4, status: "Available", controlId: "ctrl-316", domain: "IT Governance" },
-    { id: "ev-316-5", name: "Compliance Training Records", description: "Evidence that IT and compliance staff have been trained on SAMA ITGF requirements.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-316", domain: "IT Governance" },
+    { id: "ev-316-1", name: "SAMA Regulatory Compliance Register", description: "Register mapping all SAMA IT regulations to compliance status, gaps, and remediation actions.", type: "Record", owner: "Compliance Officer", updateFrequency: "Quarterly", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-316", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-316-2", name: "Regulatory Compliance Board Reports", description: "Quarterly reports to the Board Technology Committee on SAMA compliance status.", type: "Report", owner: "Compliance Officer", updateFrequency: "Quarterly", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-316", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-316-3", name: "Regulatory Watch Records", description: "Evidence of monitoring new SAMA circulars and assessing their impact.", type: "Record", owner: "Compliance Officer", updateFrequency: "Ongoing", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-316", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-316-4", name: "Regulatory Breach Notification Records", description: "Records of any SAMA breach notifications including the notification itself and SAMA's acknowledgement.", type: "Record", owner: "Compliance Officer", updateFrequency: "As required", maturityLevelSupported: 4, status: "Available", controlId: "ctrl-316", domain: "Information Technology Governance and Leadership" },
+    { id: "ev-316-5", name: "Compliance Training Records", description: "Evidence that IT and compliance staff have been trained on SAMA ITGF requirements.", type: "Record", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Missing", controlId: "ctrl-316", domain: "Information Technology Governance and Leadership" },
   ],
 
   maturityGuidance: [

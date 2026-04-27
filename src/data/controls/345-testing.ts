@@ -4,9 +4,9 @@ export const control345: Control = {
   id: "ctrl-345",
   controlNumber: "3.4.5",
   title: "Testing",
-  domain: "IT Project & Change Management",
+  domain: "System Change Management",
   domainId: "dom-34",
-  subdomain: "IT Change Management",
+  subdomain: "System Change Management",
   subdomainId: "sub-341",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control345: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-345-1", name: "Test Management Policy", description: "Policy defining required test types, test authority, environment usage, and defect management.", type: "Policy", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-345", domain: "IT Project & Change Management" },
-    { id: "ev-345-2", name: "Test Plans for Recent Changes", description: "Sample test plans showing test scope, test types, test cases, and execution schedule.", type: "Document", owner: "Application Owner", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-345", domain: "IT Project & Change Management" },
-    { id: "ev-345-3", name: "Test Execution Results", description: "Completed test execution records showing test case results, defects raised, and defect resolution.", type: "Record", owner: "Application Owner", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-345", domain: "IT Project & Change Management" },
-    { id: "ev-345-4", name: "UAT Sign-off Records", description: "Business owner UAT sign-off records for Normal changes.", type: "Record", owner: "Business Unit Head", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-345", domain: "IT Project & Change Management" },
-    { id: "ev-345-5", name: "Security Testing Reports", description: "SAST, DAST, and penetration test reports for application changes.", type: "Report", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-345", domain: "IT Project & Change Management" },
+    { id: "ev-345-1", name: "Test Management Policy", description: "Policy defining required test types, test authority, environment usage, and defect management.", type: "Policy", owner: "IT Governance Head", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-345", domain: "System Change Management" },
+    { id: "ev-345-2", name: "Test Plans for Recent Changes", description: "Sample test plans showing test scope, test types, test cases, and execution schedule.", type: "Document", owner: "Application Owner", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-345", domain: "System Change Management" },
+    { id: "ev-345-3", name: "Test Execution Results", description: "Completed test execution records showing test case results, defects raised, and defect resolution.", type: "Record", owner: "Application Owner", updateFrequency: "Per change", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-345", domain: "System Change Management" },
+    { id: "ev-345-4", name: "UAT Sign-off Records", description: "Business owner UAT sign-off records for Normal changes.", type: "Record", owner: "Business Unit Head", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-345", domain: "System Change Management" },
+    { id: "ev-345-5", name: "Security Testing Reports", description: "SAST, DAST, and penetration test reports for application changes.", type: "Report", owner: "CISO", updateFrequency: "Per change", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-345", domain: "System Change Management" },
   ],
 
   maturityGuidance: [

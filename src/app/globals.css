@@ -3,11 +3,12 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --sidebar-bg: #0f172a;
-  --sidebar-text: #94a3b8;
-  --sidebar-active: #1e40af;
-  --primary: #1d4ed8;
-  --primary-hover: #1e40af;
+  --sidebar-bg: #003d24;
+  --sidebar-text: #a7c4b0;
+  --sidebar-active: #006B3F;
+  --primary: #006B3F;
+  --primary-hover: #005230;
+  --secondary: #86BC25;
   --border: #e2e8f0;
   --muted: #f8fafc;
   --muted-foreground: #64748b;

@@ -4,9 +4,9 @@ export const control3310: Control = {
   id: "ctrl-3310",
   controlNumber: "3.3.10",
   title: "Data Backup and Recoverability",
-  domain: "IT Operations",
+  domain: "Operations Management",
   domainId: "dom-33",
-  subdomain: "IT Operations Management",
+  subdomain: "Operations Management",
   subdomainId: "sub-3310",
   priority: "P1",
   targetMaturity: 4,
@@ -52,11 +52,11 @@ export const control3310: Control = {
   ],
 
   evidenceChecklist: [
-    { id: "ev-3310-1", name: "IT Backup Policy", description: "Formal backup policy defining scope, frequency, retention, and storage requirements.", type: "Policy", owner: "Infrastructure Owner", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-3310", domain: "IT Operations" },
-    { id: "ev-3310-2", name: "RTO/RPO Register", description: "Formally agreed RTO and RPO for all critical systems.", type: "Document", owner: "Business Continuity Manager", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-3310", domain: "IT Operations" },
-    { id: "ev-3310-3", name: "Backup Job Success Reports (Last 3 Months)", description: "Daily backup monitoring reports showing success/failure rates.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Daily", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-3310", domain: "IT Operations" },
-    { id: "ev-3310-4", name: "Recovery Test Reports (Last 12 Months)", description: "Formal test reports documenting recovery test scenarios, results, RTO/RPO validation, and remediation actions.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Annual minimum", maturityLevelSupported: 4, status: "Partial", controlId: "ctrl-3310", domain: "IT Operations" },
-    { id: "ev-3310-5", name: "Immutable/Offsite Backup Evidence", description: "Configuration and test evidence showing that immutable and offsite backup copies exist and are accessible.", type: "Screenshot", owner: "Infrastructure Owner", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-3310", domain: "IT Operations" },
+    { id: "ev-3310-1", name: "IT Backup Policy", description: "Formal backup policy defining scope, frequency, retention, and storage requirements.", type: "Policy", owner: "Infrastructure Owner", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-3310", domain: "Operations Management" },
+    { id: "ev-3310-2", name: "RTO/RPO Register", description: "Formally agreed RTO and RPO for all critical systems.", type: "Document", owner: "Business Continuity Manager", updateFrequency: "Annual", maturityLevelSupported: 3, status: "Partial", controlId: "ctrl-3310", domain: "Operations Management" },
+    { id: "ev-3310-3", name: "Backup Job Success Reports (Last 3 Months)", description: "Daily backup monitoring reports showing success/failure rates.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Daily", maturityLevelSupported: 3, status: "Available", controlId: "ctrl-3310", domain: "Operations Management" },
+    { id: "ev-3310-4", name: "Recovery Test Reports (Last 12 Months)", description: "Formal test reports documenting recovery test scenarios, results, RTO/RPO validation, and remediation actions.", type: "Report", owner: "Infrastructure Owner", updateFrequency: "Annual minimum", maturityLevelSupported: 4, status: "Partial", controlId: "ctrl-3310", domain: "Operations Management" },
+    { id: "ev-3310-5", name: "Immutable/Offsite Backup Evidence", description: "Configuration and test evidence showing that immutable and offsite backup copies exist and are accessible.", type: "Screenshot", owner: "Infrastructure Owner", updateFrequency: "Annual", maturityLevelSupported: 4, status: "Missing", controlId: "ctrl-3310", domain: "Operations Management" },
   ],
 
   maturityGuidance: [
