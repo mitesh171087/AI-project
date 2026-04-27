@@ -1,5 +1,5 @@
 "use client";
-import { use } from "react";
+import { use, useState, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { AppHeader } from "@/components/layout/AppHeader";
@@ -18,21 +18,34 @@ import { RoadmapTimeline } from "@/components/RoadmapTimeline";
 import { Button } from "@/components/ui/button";
 import { getControlById, allControls } from "@/data";
 import { MATURITY_LABELS } from "@/lib/utils";
+import { useOverrides } from "@/context/ControlOverridesContext";
 import {
   ChevronLeft, ChevronRight, AlertTriangle, Info, Target, ShieldAlert,
-  Star, ExternalLink,
+  Star, ExternalLink, Pencil, Save, RotateCcw, Check, Flame,
 } from "lucide-react";
-import type { MaturityLevel } from "@/types";
+import type { MaturityLevel, Criticality, EvidenceItem, AuditQuestion, EvidenceStatus } from "@/types";
 
 interface Props {
   params: Promise<{ controlId: string }>;
 }
 
+const CRITICALITY_OPTIONS: Criticality[] = ["Critical", "High", "Medium", "Low", "Not Applicable"];
+const CRITICALITY_STYLES: Record<Criticality, string> = {
+  "Critical": "bg-red-100 text-red-700 border border-red-200",
+  "High": "bg-orange-100 text-orange-700 border border-orange-200",
+  "Medium": "bg-yellow-100 text-yellow-700 border border-yellow-200",
+  "Low": "bg-green-100 text-green-700 border border-green-200",
+  "Not Applicable": "bg-slate-100 text-slate-500 border border-slate-200",
+};
+
 export default function ControlDetailPage({ params }: Props) {
   const { controlId } = use(params);
   const control = getControlById(controlId);
-
   if (!control) notFound();
+
+  const { getOverride, updateControl, resetControl, isModified } = useOverrides();
+  const override = getOverride(control.id);
+  const modified = isModified(control.id);
 
   const idx = allControls.findIndex((c) => c.id === controlId);
   const prevCtrl = idx > 0 ? allControls[idx - 1] : null;
@@ -40,25 +53,122 @@ export default function ControlDetailPage({ params }: Props) {
 
   const l4 = control.maturityGuidance.find((g) => g.level === 4);
 
+  // Edit mode
+  const [editMode, setEditMode] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  // Editable field state (populated when entering edit mode)
+  const [editPlainEnglish, setEditPlainEnglish] = useState("");
+  const [editSamaIntent, setEditSamaIntent] = useState("");
+  const [editWhyItMatters, setEditWhyItMatters] = useState("");
+  const [editRisk, setEditRisk] = useState("");
+  const [editEvidence, setEditEvidence] = useState<EvidenceItem[]>([]);
+  const [editAuditQs, setEditAuditQs] = useState<AuditQuestion[]>([]);
+
+  // Criticality: saved immediately without edit mode
+  const [criticality, setCriticality] = useState<Criticality | undefined>(override?.criticality);
+  useEffect(() => { setCriticality(override?.criticality); }, [override?.criticality]);
+
+  const enterEditMode = () => {
+    setEditPlainEnglish(override?.plainEnglishInterpretation ?? control.plainEnglishInterpretation);
+    setEditSamaIntent(override?.samaIntent ?? control.samaIntent);
+    setEditWhyItMatters(override?.whyItMatters ?? control.whyItMatters);
+    setEditRisk(override?.riskIfNotImplemented ?? control.riskIfNotImplemented);
+    setEditEvidence((override?.evidenceChecklist ?? control.evidenceChecklist).map((e) => ({ ...e })));
+    setEditAuditQs((override?.auditQuestions ?? control.auditQuestions).map((q) => ({ ...q })));
+    setEditMode(true);
+  };
+
+  const handleSave = () => {
+    updateControl(control.id, {
+      plainEnglishInterpretation: editPlainEnglish,
+      samaIntent: editSamaIntent,
+      whyItMatters: editWhyItMatters,
+      riskIfNotImplemented: editRisk,
+      evidenceChecklist: editEvidence,
+      auditQuestions: editAuditQs,
+    });
+    setEditMode(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleDiscard = () => setEditMode(false);
+
+  const handleReset = () => {
+    if (!confirm("Reset all edits for this control to the original content? This cannot be undone.")) return;
+    resetControl(control.id);
+    setCriticality(undefined);
+    setEditMode(false);
+  };
+
+  const handleCriticalityChange = (val: Criticality) => {
+    setCriticality(val);
+    updateControl(control.id, { criticality: val });
+  };
+
+  const updateEditEvidence = (idx: number, field: keyof EvidenceItem, value: string) => {
+    setEditEvidence((prev) => prev.map((e, i) => i === idx ? { ...e, [field]: value } : e));
+  };
+
+  const updateEditAuditQ = (idx: number, field: keyof AuditQuestion, value: string) => {
+    setEditAuditQs((prev) => prev.map((q, i) => i === idx ? { ...q, [field]: value } : q));
+  };
+
+  // Display values (override > seed data)
+  const displayPlainEnglish = editMode ? editPlainEnglish : (override?.plainEnglishInterpretation ?? control.plainEnglishInterpretation);
+  const displaySamaIntent = editMode ? editSamaIntent : (override?.samaIntent ?? control.samaIntent);
+  const displayWhyItMatters = editMode ? editWhyItMatters : (override?.whyItMatters ?? control.whyItMatters);
+  const displayRisk = editMode ? editRisk : (override?.riskIfNotImplemented ?? control.riskIfNotImplemented);
+  const displayEvidence = editMode ? editEvidence : (override?.evidenceChecklist ?? control.evidenceChecklist);
+  const displayAuditQs = editMode ? editAuditQs : (override?.auditQuestions ?? control.auditQuestions);
+
   return (
     <div className="flex flex-col min-h-full">
       <AppHeader
         title={`${control.controlNumber} – ${control.title}`}
         subtitle={`${control.domain} › ${control.subdomain}`}
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Edit controls */}
+            {editMode ? (
+              <>
+                <Button size="sm" onClick={handleSave} className="bg-green-600 hover:bg-green-700 text-white">
+                  <Save className="h-4 w-4" /> Save Changes
+                </Button>
+                <Button size="sm" variant="ghost" onClick={handleDiscard}>Discard</Button>
+              </>
+            ) : (
+              <>
+                {saved && (
+                  <span className="flex items-center gap-1 text-green-600 text-xs font-medium">
+                    <Check className="h-4 w-4" /> Saved
+                  </span>
+                )}
+                {modified && (
+                  <span className="text-xs bg-amber-100 text-amber-700 border border-amber-200 rounded px-2 py-0.5 font-medium">
+                    Modified
+                  </span>
+                )}
+                <Button size="sm" variant="outline" onClick={enterEditMode}>
+                  <Pencil className="h-4 w-4" /> Edit Content
+                </Button>
+                {modified && (
+                  <Button size="sm" variant="ghost" onClick={handleReset} className="text-red-600 hover:text-red-700">
+                    <RotateCcw className="h-4 w-4" /> Reset
+                  </Button>
+                )}
+              </>
+            )}
+            {/* Navigation */}
             {prevCtrl && (
               <Button variant="outline" size="sm" asChild>
-                <Link href={`/framework/${prevCtrl.id}`}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Link>
+                <Link href={`/framework/${prevCtrl.id}`}><ChevronLeft className="h-4 w-4" /></Link>
               </Button>
             )}
             {nextCtrl && (
               <Button variant="outline" size="sm" asChild>
-                <Link href={`/framework/${nextCtrl.id}`}>
-                  <ChevronRight className="h-4 w-4" />
-                </Link>
+                <Link href={`/framework/${nextCtrl.id}`}><ChevronRight className="h-4 w-4" /></Link>
               </Button>
             )}
             <Button variant="outline" size="sm" asChild>
@@ -69,6 +179,14 @@ export default function ControlDetailPage({ params }: Props) {
       />
 
       <div className="p-6 flex flex-col gap-6 flex-1">
+        {/* Edit mode banner */}
+        {editMode && (
+          <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+            <Pencil className="h-4 w-4 shrink-0" />
+            <span>Edit mode active — changes will be saved to your browser. Use <strong>Save Changes</strong> to persist edits or <strong>Discard</strong> to cancel.</span>
+          </div>
+        )}
+
         {/* Control header strip */}
         <Card>
           <CardContent className="p-4">
@@ -79,6 +197,28 @@ export default function ControlDetailPage({ params }: Props) {
               <PriorityBadge priority={control.priority} showLabel />
               <StatusBadge status={control.implementationStatus} />
               <EvidenceBadge status={control.evidenceReadiness} />
+
+              {/* Criticality selector */}
+              <div className="flex items-center gap-2">
+                <Flame className="h-4 w-4 text-slate-400" />
+                <span className="text-xs text-slate-500">Criticality:</span>
+                {criticality && (
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${CRITICALITY_STYLES[criticality]}`}>
+                    {criticality}
+                  </span>
+                )}
+                <select
+                  value={criticality ?? ""}
+                  onChange={(e) => e.target.value ? handleCriticalityChange(e.target.value as Criticality) : undefined}
+                  className="text-xs border border-slate-200 rounded px-2 py-1 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                >
+                  <option value="">Set criticality…</option>
+                  {CRITICALITY_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              </div>
+
               <div className="flex items-center gap-2 ml-auto">
                 <span className="text-xs text-slate-500">Current:</span>
                 <MaturityBadge level={control.currentMaturity} />
@@ -106,21 +246,48 @@ export default function ControlDetailPage({ params }: Props) {
           <TabsContent value="overview">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="lg:col-span-2 flex flex-col gap-4">
-                <Card>
-                  <CardHeader><CardTitle className="flex items-center gap-2"><Info className="h-4 w-4 text-blue-500" />Plain-English Interpretation</CardTitle></CardHeader>
-                  <CardContent><p className="text-sm text-slate-700 leading-relaxed">{control.plainEnglishInterpretation}</p></CardContent>
-                </Card>
-                <Card>
-                  <CardHeader><CardTitle className="flex items-center gap-2"><Target className="h-4 w-4 text-violet-500" />SAMA's Regulatory Intent</CardTitle></CardHeader>
-                  <CardContent><p className="text-sm text-slate-700 leading-relaxed">{control.samaIntent}</p></CardContent>
-                </Card>
-                <Card>
-                  <CardHeader><CardTitle className="flex items-center gap-2"><Star className="h-4 w-4 text-amber-500" />Why This Control Matters</CardTitle></CardHeader>
-                  <CardContent><p className="text-sm text-slate-700 leading-relaxed">{control.whyItMatters}</p></CardContent>
-                </Card>
-                <Card className="border-red-100">
-                  <CardHeader><CardTitle className="flex items-center gap-2 text-red-700"><ShieldAlert className="h-4 w-4" />Risk if Not Implemented</CardTitle></CardHeader>
-                  <CardContent><p className="text-sm text-red-700 leading-relaxed">{control.riskIfNotImplemented}</p></CardContent>
+                <EditableCard
+                  editMode={editMode}
+                  icon={<Info className="h-4 w-4 text-blue-500" />}
+                  title="Plain-English Interpretation"
+                  text={displayPlainEnglish}
+                  value={editPlainEnglish}
+                  onChange={setEditPlainEnglish}
+                />
+                <EditableCard
+                  editMode={editMode}
+                  icon={<Target className="h-4 w-4 text-violet-500" />}
+                  title="SAMA's Regulatory Intent"
+                  text={displaySamaIntent}
+                  value={editSamaIntent}
+                  onChange={setEditSamaIntent}
+                />
+                <EditableCard
+                  editMode={editMode}
+                  icon={<Star className="h-4 w-4 text-amber-500" />}
+                  title="Why This Control Matters"
+                  text={displayWhyItMatters}
+                  value={editWhyItMatters}
+                  onChange={setEditWhyItMatters}
+                />
+                <Card className={editMode ? "border-red-200 ring-1 ring-red-200" : "border-red-100"}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-red-700">
+                      <ShieldAlert className="h-4 w-4" />Risk if Not Implemented
+                      {editMode && <span className="text-[10px] bg-red-100 text-red-600 rounded px-1.5 ml-1">Editing</span>}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {editMode ? (
+                      <textarea
+                        className="w-full text-sm text-red-700 leading-relaxed border border-red-200 rounded p-2 bg-red-50/30 focus:outline-none focus:ring-1 focus:ring-red-400 resize-y min-h-[80px]"
+                        value={editRisk}
+                        onChange={(e) => setEditRisk(e.target.value)}
+                      />
+                    ) : (
+                      <p className="text-sm text-red-700 leading-relaxed">{displayRisk}</p>
+                    )}
+                  </CardContent>
                 </Card>
               </div>
 
@@ -136,6 +303,11 @@ export default function ControlDetailPage({ params }: Props) {
                     <Row label="Target Maturity" value={<MaturityBadge level={control.targetMaturity} />} />
                     <Row label="Status" value={<StatusBadge status={control.implementationStatus} />} />
                     <Row label="Evidence" value={<EvidenceBadge status={control.evidenceReadiness} />} />
+                    {criticality && (
+                      <Row label="Criticality" value={
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${CRITICALITY_STYLES[criticality]}`}>{criticality}</span>
+                      } />
+                    )}
                   </CardContent>
                 </Card>
 
@@ -173,13 +345,16 @@ export default function ControlDetailPage({ params }: Props) {
                 )}
 
                 <Card className="border-amber-100 bg-amber-50/30">
-                  <CardHeader><CardTitle className="flex items-center gap-2 text-amber-800"><AlertTriangle className="h-4 w-4" />Common Gaps</CardTitle></CardHeader>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-amber-800">
+                      <AlertTriangle className="h-4 w-4" />Common Gaps
+                    </CardTitle>
+                  </CardHeader>
                   <CardContent>
                     <ul className="flex flex-col gap-2">
                       {control.commonGaps.map((gap, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-amber-800">
-                          <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
-                          {gap}
+                          <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />{gap}
                         </li>
                       ))}
                     </ul>
@@ -228,8 +403,44 @@ export default function ControlDetailPage({ params }: Props) {
             <div className="flex flex-col gap-4">
               <p className="text-sm text-slate-600">
                 Questions SAMA examiners may ask during a maturity assessment or audit visit for this control.
+                {editMode && <span className="ml-2 text-blue-600 font-medium">Edit mode active — click fields to edit.</span>}
               </p>
-              <AuditQuestionAccordion questions={control.auditQuestions} />
+              {editMode ? (
+                <div className="flex flex-col gap-4">
+                  {editAuditQs.map((q, i) => (
+                    <Card key={q.id} className="border-blue-200 ring-1 ring-blue-100">
+                      <CardContent className="p-4 flex flex-col gap-3">
+                        <div>
+                          <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Question</label>
+                          <textarea
+                            className="w-full mt-1 text-sm border border-slate-200 rounded p-2 focus:outline-none focus:ring-1 focus:ring-blue-400 resize-y min-h-[60px]"
+                            value={q.question}
+                            onChange={(e) => updateEditAuditQ(i, "question", e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Why SAMA May Ask</label>
+                          <textarea
+                            className="w-full mt-1 text-sm border border-slate-200 rounded p-2 focus:outline-none focus:ring-1 focus:ring-blue-400 resize-y min-h-[50px]"
+                            value={q.whySamaMayAsk}
+                            onChange={(e) => updateEditAuditQ(i, "whySamaMayAsk", e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Expected Answer</label>
+                          <textarea
+                            className="w-full mt-1 text-sm border border-slate-200 rounded p-2 focus:outline-none focus:ring-1 focus:ring-blue-400 resize-y min-h-[80px]"
+                            value={q.expectedAnswer}
+                            onChange={(e) => updateEditAuditQ(i, "expectedAnswer", e.target.value)}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <AuditQuestionAccordion questions={displayAuditQs} />
+              )}
             </div>
           </TabsContent>
 
@@ -238,24 +449,76 @@ export default function ControlDetailPage({ params }: Props) {
             <div className="flex flex-col gap-4">
               <p className="text-sm text-slate-600">
                 Evidence items required to demonstrate compliance maturity for control {control.controlNumber}.
+                {editMode && <span className="ml-2 text-blue-600 font-medium">Edit mode active — edit name, description, or status.</span>}
               </p>
-              <EvidenceTable
-                items={control.evidenceChecklist}
-                exportFilename={`${control.controlNumber}-evidence.csv`}
-              />
+              {editMode ? (
+                <Card>
+                  <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-slate-100 bg-slate-50">
+                            <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase">Name</th>
+                            <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase">Description</th>
+                            <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase w-36">Status</th>
+                            <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase w-24">Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {editEvidence.map((ev, i) => (
+                            <tr key={ev.id} className="border-b border-slate-50">
+                              <td className="px-4 py-2">
+                                <input
+                                  className="w-full text-sm border border-slate-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                  value={ev.name}
+                                  onChange={(e) => updateEditEvidence(i, "name", e.target.value)}
+                                />
+                              </td>
+                              <td className="px-4 py-2">
+                                <textarea
+                                  className="w-full text-sm border border-slate-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 resize-y min-h-[50px]"
+                                  value={ev.description}
+                                  onChange={(e) => updateEditEvidence(i, "description", e.target.value)}
+                                />
+                              </td>
+                              <td className="px-4 py-2">
+                                <select
+                                  className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-blue-400 w-full"
+                                  value={ev.status}
+                                  onChange={(e) => updateEditEvidence(i, "status", e.target.value as EvidenceStatus)}
+                                >
+                                  {(["Missing", "Partial", "Available", "Verified"] as EvidenceStatus[]).map((s) => (
+                                    <option key={s} value={s}>{s}</option>
+                                  ))}
+                                </select>
+                              </td>
+                              <td className="px-4 py-2">
+                                <span className="text-xs text-slate-500">{ev.type}</span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <EvidenceTable
+                  items={displayEvidence}
+                  exportFilename={`${control.controlNumber}-evidence.csv`}
+                />
+              )}
             </div>
           </TabsContent>
 
           {/* Tab 7: Maturity Guidance */}
           <TabsContent value="maturity">
             <div className="flex flex-col gap-4">
-              {/* L4 highlight */}
               {l4 && (
                 <Card className="border-green-200 bg-green-50/50">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-green-800">
-                      <Star className="h-5 w-5 text-green-600" />
-                      Level 4 – SAMA Readiness Target
+                      <Star className="h-5 w-5 text-green-600" />Level 4 – SAMA Readiness Target
                     </CardTitle>
                     <p className="text-sm text-green-700 mt-1">{l4.description}</p>
                   </CardHeader>
@@ -275,8 +538,6 @@ export default function ControlDetailPage({ params }: Props) {
                   </CardContent>
                 </Card>
               )}
-
-              {/* All levels */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {control.maturityGuidance.map((g) => (
                   <MaturityLevelCard key={g.level} guidance={g} current={control.currentMaturity} target={control.targetMaturity} />
@@ -300,6 +561,41 @@ export default function ControlDetailPage({ params }: Props) {
   );
 }
 
+// ─── Sub-components ───────────────────────────────────────
+
+function EditableCard({
+  editMode, icon, title, text, value, onChange,
+}: {
+  editMode: boolean;
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <Card className={editMode ? "border-blue-200 ring-1 ring-blue-100" : ""}>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          {icon}{title}
+          {editMode && <span className="text-[10px] bg-blue-100 text-blue-600 rounded px-1.5 ml-1">Editing</span>}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {editMode ? (
+          <textarea
+            className="w-full text-sm text-slate-700 leading-relaxed border border-slate-200 rounded p-2 bg-white focus:outline-none focus:ring-1 focus:ring-blue-400 resize-y min-h-[80px]"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        ) : (
+          <p className="text-sm text-slate-700 leading-relaxed">{text}</p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-start justify-between gap-2">
@@ -319,9 +615,7 @@ interface MaturityGuidanceItem {
 }
 
 function MaturityLevelCard({
-  guidance,
-  current,
-  target,
+  guidance, current, target,
 }: {
   guidance: MaturityGuidanceItem;
   current: MaturityLevel;

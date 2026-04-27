@@ -1,12 +1,21 @@
 "use client";
 import Link from "next/link";
-import { ArrowRight, AlertTriangle } from "lucide-react";
+import { ArrowRight, AlertTriangle, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { MaturityBadge } from "@/components/MaturityBadge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { StatusBadge, EvidenceBadge } from "@/components/StatusBadge";
 import { DOMAIN_COLORS, cn } from "@/lib/utils";
-import type { Control } from "@/types";
+import { useOverrides } from "@/context/ControlOverridesContext";
+import type { Control, Criticality } from "@/types";
+
+const CRITICALITY_STYLES: Record<Criticality, string> = {
+  "Critical": "bg-red-100 text-red-700",
+  "High": "bg-orange-100 text-orange-700",
+  "Medium": "bg-yellow-100 text-yellow-700",
+  "Low": "bg-green-100 text-green-700",
+  "Not Applicable": "bg-slate-100 text-slate-500",
+};
 
 interface ControlCardProps {
   control: Control;
@@ -15,6 +24,9 @@ interface ControlCardProps {
 
 export function ControlCard({ control, compact = false }: ControlCardProps) {
   const hasGap = control.targetMaturity > control.currentMaturity;
+  const { getOverride } = useOverrides();
+  const override = getOverride(control.id);
+  const criticality = override?.criticality;
 
   return (
     <Link href={`/framework/${control.id}`}>
@@ -32,6 +44,11 @@ export function ControlCard({ control, compact = false }: ControlCardProps) {
                     <AlertTriangle className="h-3 w-3" /> Gap
                   </span>
                 )}
+                {criticality && (
+                  <span className={cn("inline-flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded-full", CRITICALITY_STYLES[criticality])}>
+                    <Flame className="h-3 w-3" />{criticality}
+                  </span>
+                )}
               </div>
               <h3 className="text-sm font-semibold text-slate-900 leading-snug group-hover:text-blue-700 transition-colors line-clamp-2">
                 {control.title}
@@ -42,7 +59,7 @@ export function ControlCard({ control, compact = false }: ControlCardProps) {
 
           {!compact && (
             <p className="text-xs text-slate-500 line-clamp-2 flex-1">
-              {control.plainEnglishInterpretation}
+              {override?.plainEnglishInterpretation ?? control.plainEnglishInterpretation}
             </p>
           )}
 

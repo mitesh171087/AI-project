@@ -5,6 +5,7 @@
 
 export type MaturityLevel = 1 | 2 | 3 | 4 | 5;
 export type Priority = "P1" | "P2" | "P3";
+export type Criticality = "Critical" | "High" | "Medium" | "Low" | "Not Applicable";
 export type ImplementationStatus =
   | "Not Started"
   | "In Progress"
@@ -207,6 +208,22 @@ export interface Domain {
   description: string;
   subdomains: Subdomain[];
 }
+
+// ─────────────────────────────────────────────
+// Control Content Overrides (stored in localStorage)
+// ─────────────────────────────────────────────
+export interface ControlOverride {
+  criticality?: Criticality;
+  plainEnglishInterpretation?: string;
+  samaIntent?: string;
+  whyItMatters?: string;
+  riskIfNotImplemented?: string;
+  evidenceChecklist?: EvidenceItem[];
+  auditQuestions?: AuditQuestion[];
+  commonGaps?: string[];
+}
+
+export type AllOverrides = Record<string, ControlOverride>;
 
 // ─────────────────────────────────────────────
 // Assessment State (local state, future: DB)

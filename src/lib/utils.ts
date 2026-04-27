@@ -77,6 +77,8 @@ export const DOMAIN_COLORS: Record<string, string> = {
   "IT Risk Management": "bg-purple-100 text-purple-800",
   "IT Operations": "bg-cyan-100 text-cyan-800",
   "IT Project & Change Management": "bg-teal-100 text-teal-800",
+  "IT Human Capital": "bg-rose-100 text-rose-800",
+  "Third Party Management": "bg-orange-100 text-orange-800",
 };
 
 // ─── CSV Export ──────────────────────────────────────────────────────────────
