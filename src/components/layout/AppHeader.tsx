@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Bell, User } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AppHeaderProps {
@@ -41,15 +41,6 @@ export function AppHeader({ title, subtitle, actions }: AppHeaderProps) {
         </form>
 
         {actions}
-
-        <div className="flex items-center gap-1.5">
-          <Button variant="ghost" size="icon" className="text-slate-500 hover:text-slate-700">
-            <Bell className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="text-slate-500 hover:text-slate-700">
-            <User className="h-4 w-4" />
-          </Button>
-        </div>
       </div>
     </header>
   );

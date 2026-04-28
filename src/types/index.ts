@@ -210,10 +210,23 @@ export interface Domain {
 }
 
 // ─────────────────────────────────────────────
-// Control Content Overrides (stored in localStorage)
+// Audit Trail Entry (appended on every save)
+// ─────────────────────────────────────────────
+export interface AuditTrailEntry {
+  id: string;
+  timestamp: string; // ISO string
+  note: string;
+  changes: Record<string, { from: string; to: string }>;
+}
+
+// ─────────────────────────────────────────────
+// Control Content + Assessment Overrides (localStorage)
 // ─────────────────────────────────────────────
 export interface ControlOverride {
+  // Criticality (configurable classification)
   criticality?: Criticality;
+
+  // Content overrides (framework page editing)
   plainEnglishInterpretation?: string;
   samaIntent?: string;
   whyItMatters?: string;
@@ -221,6 +234,19 @@ export interface ControlOverride {
   evidenceChecklist?: EvidenceItem[];
   auditQuestions?: AuditQuestion[];
   commonGaps?: string[];
+
+  // Assessment data (saved from assessment page)
+  currentMaturity?: MaturityLevel;
+  targetMaturity?: MaturityLevel;
+  implementationStatus?: ImplementationStatus;
+  evidenceReadiness?: EvidenceStatus;
+  owner?: string;
+  keyGaps?: string;
+  remediationAction?: string;
+  targetDate?: string;
+
+  // Audit trail (one entry per save)
+  auditTrail?: AuditTrailEntry[];
 }
 
 export type AllOverrides = Record<string, ControlOverride>;
