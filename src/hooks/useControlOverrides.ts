@@ -7,12 +7,19 @@ const STORAGE_KEY = "sama-control-overrides";
 export function useControlOverrides() {
   const [overrides, setOverrides] = useState<AllOverrides>({});
   const [ready, setReady] = useState(false);
+  const [storageError, setStorageError] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) setOverrides(JSON.parse(stored));
-    } catch {}
+    } catch (e) {
+      console.error("[SAMA] Failed to load saved assessment data:", e);
+      setStorageError(
+        "Your saved assessment data could not be loaded — it may be corrupted. " +
+        "Export a backup from the Admin page before making new changes."
+      );
+    }
     setReady(true);
   }, []);
 
@@ -20,7 +27,16 @@ export function useControlOverrides() {
     setOverrides(next);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {}
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "QuotaExceededError") {
+        setStorageError(
+          "Browser storage limit reached — your latest change was NOT saved. " +
+          "Export a backup from the Admin page to free up space."
+        );
+      } else {
+        console.error("[SAMA] Failed to persist data:", e);
+      }
+    }
   }, []);
 
   const updateControl = useCallback(
@@ -32,7 +48,16 @@ export function useControlOverrides() {
         };
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        } catch {}
+        } catch (e) {
+          if (e instanceof DOMException && e.name === "QuotaExceededError") {
+            setStorageError(
+              "Browser storage limit reached — your latest change was NOT saved. " +
+              "Export a backup from the Admin page to free up space."
+            );
+          } else {
+            console.error("[SAMA] Failed to persist data:", e);
+          }
+        }
         return next;
       });
     },
@@ -46,7 +71,9 @@ export function useControlOverrides() {
         const { [controlId]: _removed, ...rest } = prev;
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
-        } catch {}
+        } catch (e) {
+          console.error("[SAMA] Failed to persist data:", e);
+        }
         return rest;
       });
     },
@@ -64,5 +91,7 @@ export function useControlOverrides() {
     [overrides]
   );
 
-  return { overrides, ready, updateControl, resetControl, getOverride, isModified, persist };
+  const dismissError = useCallback(() => setStorageError(null), []);
+
+  return { overrides, ready, storageError, dismissError, updateControl, resetControl, getOverride, isModified, persist };
 }

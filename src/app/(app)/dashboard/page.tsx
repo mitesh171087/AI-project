@@ -12,10 +12,10 @@ import { Button } from "@/components/ui/button";
 import { MaturityBadge } from "@/components/MaturityBadge";
 import {
   ShieldCheck, AlertTriangle, BarChart3, BookOpen,
-  ArrowRight, TrendingUp, CheckCircle2, XCircle, Clock, Flame,
+  ArrowRight, TrendingUp, CheckCircle2, XCircle, Clock, Flame, CalendarX, Target,
 } from "lucide-react";
 import { allControls, domains } from "@/data";
-import { MATURITY_COLORS, DOMAIN_COLORS, cn } from "@/lib/utils";
+import { MATURITY_COLORS, DOMAIN_COLORS, CRITICALITY_STYLES, getComplianceScore, cn } from "@/lib/utils";
 import { useOverrides } from "@/context/ControlOverridesContext";
 import type { Control, Criticality, MaturityLevel } from "@/types";
 
@@ -43,6 +43,9 @@ const DOMAIN_SHORT: Record<string, string> = {
   "System Change Management": "System Change Mgmt",
 };
 
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+
 export default function DashboardPage() {
   const { overrides } = useOverrides();
 
@@ -54,11 +57,13 @@ export default function DashboardPage() {
       implementationStatus: o?.implementationStatus ?? ctrl.implementationStatus,
       evidenceReadiness: o?.evidenceReadiness ?? ctrl.evidenceReadiness,
       criticality: o?.criticality,
+      targetDate: o?.targetDate,
     };
   };
 
-  // Core metrics
   const totalControls = allControls.length;
+
+  const complianceScore = useMemo(() => getComplianceScore(allControls, overrides), [overrides]);
 
   const avgMaturity = useMemo(() => {
     const sum = allControls.reduce((s, c) => s + getEffective(c).currentMaturity, 0);
@@ -77,7 +82,15 @@ export default function DashboardPage() {
     return counts;
   }, [overrides]);
 
-  // Domain-wise maturity
+  const overdueCount = useMemo(() =>
+    allControls.filter((c) => {
+      const eff = getEffective(c);
+      if (!eff.targetDate || eff.implementationStatus === "Implemented") return false;
+      return new Date(eff.targetDate) < TODAY;
+    }).length,
+    [overrides]
+  );
+
   const domainMaturity = useMemo(() =>
     domains.map((d) => {
       const ctrls = allControls.filter((c) => c.domainId === d.id);
@@ -87,13 +100,11 @@ export default function DashboardPage() {
       return {
         name: DOMAIN_SHORT[d.name] ?? d.name,
         avg: Math.round(avg * 10) / 10,
-        fill: "#006B3F",
       };
     }),
     [overrides]
   );
 
-  // Criticality distribution
   const criticalityData = useMemo(() => {
     const counts: Record<string, number> = { Critical: 0, High: 0, Medium: 0, Low: 0, "Not Applicable": 0, "Not Set": 0 };
     allControls.forEach((c) => {
@@ -106,7 +117,8 @@ export default function DashboardPage() {
     ].filter((d) => d.value > 0);
   }, [overrides]);
 
-  // Evidence pie
+  const allUnset = criticalityData.length === 0 || (criticalityData.length === 1 && criticalityData[0].name === "Not Set");
+
   const evidencePie = useMemo(() =>
     Object.entries(evidenceStats).map(([name, value]) => ({ name, value })),
     [evidenceStats]
@@ -115,7 +127,6 @@ export default function DashboardPage() {
     Missing: "#ef4444", Partial: "#f59e0b", Available: "#3b82f6", Verified: "#22c55e",
   };
 
-  // Top maturity gaps (using effective values)
   const gapControls = useMemo(() =>
     allControls
       .filter((c) => { const e = getEffective(c); return e.targetMaturity > e.currentMaturity; })
@@ -127,6 +138,15 @@ export default function DashboardPage() {
       .slice(0, 5),
     [overrides]
   );
+
+  const totalGapCount = useMemo(() =>
+    allControls.filter((c) => { const e = getEffective(c); return e.targetMaturity > e.currentMaturity; }).length,
+    [overrides]
+  );
+
+  const scoreColor = complianceScore >= 80 ? "text-green-700" : complianceScore >= 60 ? "text-amber-600" : "text-red-600";
+  const scoreIcon = complianceScore >= 80 ? "bg-green-50" : complianceScore >= 60 ? "bg-amber-50" : "bg-red-50";
+  const scoreIconColor = complianceScore >= 80 ? "text-green-700" : complianceScore >= 60 ? "text-amber-600" : "text-red-600";
 
   return (
     <div className="flex flex-col">
@@ -155,12 +175,12 @@ export default function DashboardPage() {
             iconBg="bg-green-50"
           />
           <DashboardMetricCard
-            title="Overall Maturity"
-            value={`L${avgMaturity}`}
-            subtitle="Average across all controls"
-            icon={BarChart3}
-            iconColor="text-violet-600"
-            iconBg="bg-violet-50"
+            title="Compliance Score"
+            value={`${complianceScore}%`}
+            subtitle="Controls at or above target maturity"
+            icon={Target}
+            iconColor={scoreIconColor}
+            iconBg={scoreIcon}
           />
           <DashboardMetricCard
             title="Evidence Verified"
@@ -172,7 +192,7 @@ export default function DashboardPage() {
           />
           <DashboardMetricCard
             title="Maturity Gaps"
-            value={gapControls.length + (allControls.filter(c => { const e = getEffective(c); return e.targetMaturity > e.currentMaturity; }).length - gapControls.length)}
+            value={totalGapCount}
             subtitle="Controls below target"
             icon={AlertTriangle}
             iconColor="text-amber-600"
@@ -180,8 +200,8 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Row 2: Implementation status pills */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Row 2: Implementation status + overdue */}
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             { label: "Implemented", count: statusStats.Implemented, icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50" },
             { label: "In Progress", count: statusStats["In Progress"], icon: Clock, color: "text-blue-600", bg: "bg-blue-50" },
@@ -190,6 +210,16 @@ export default function DashboardPage() {
           ].map(({ label, count, icon, color, bg }) => (
             <DashboardMetricCard key={label} title={label} value={count} icon={icon} iconColor={color} iconBg={bg} />
           ))}
+          <Link href="/assessment?filter=overdue">
+            <DashboardMetricCard
+              title="Overdue"
+              value={overdueCount}
+              subtitle="Targets past due date"
+              icon={CalendarX}
+              iconColor={overdueCount > 0 ? "text-red-600" : "text-slate-400"}
+              iconBg={overdueCount > 0 ? "bg-red-50" : "bg-slate-50"}
+            />
+          </Link>
         </div>
 
         {/* Row 3: Domain maturity + Criticality + Evidence charts */}
@@ -205,7 +235,7 @@ export default function DashboardPage() {
                   <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#64748b" }} width={120} />
                   <Tooltip formatter={(v) => [`L${v}`, "Avg Maturity"]} />
                   <Bar dataKey="avg" radius={[0, 4, 4, 0]}>
-                    {domainMaturity.map((d, i) => (
+                    {domainMaturity.map((_, i) => (
                       <Cell key={i} fill={["#006B3F", "#22c55e", "#059669", "#10b981"][i % 4]} />
                     ))}
                   </Bar>
@@ -222,10 +252,17 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {criticalityData.length === 0 || criticalityData.every(d => d.name === "Not Set") ? (
-                <div className="flex flex-col items-center justify-center h-40 gap-2 text-slate-400">
+              {allUnset ? (
+                <div className="flex flex-col items-center justify-center h-40 gap-3 text-slate-400">
                   <Flame className="h-8 w-8 text-slate-200" />
-                  <p className="text-sm text-center">No criticality set yet.<br />Configure criticality in the Framework Explorer.</p>
+                  <p className="text-sm text-center text-slate-500">
+                    No criticality set yet.
+                  </p>
+                  <Link href="/framework">
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Set criticality in Framework Explorer →
+                    </Button>
+                  </Link>
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={200}>
@@ -335,12 +372,7 @@ export default function DashboardPage() {
                       <Link key={ctrl.id} href={`/framework/${ctrl.id}`} className="flex items-center justify-between py-3 hover:bg-slate-50 -mx-2 px-2 rounded transition-colors">
                         <div className="flex items-center gap-3">
                           {criticality ? (
-                            <span className={cn("text-xs font-medium px-1.5 py-0.5 rounded-full flex items-center gap-0.5",
-                              criticality === "Critical" ? "bg-red-100 text-red-700" :
-                              criticality === "High" ? "bg-orange-100 text-orange-700" :
-                              criticality === "Medium" ? "bg-yellow-100 text-yellow-700" :
-                              "bg-green-100 text-green-700"
-                            )}>
+                            <span className={cn("text-xs font-medium px-1.5 py-0.5 rounded-full flex items-center gap-0.5", CRITICALITY_STYLES[criticality])}>
                               <Flame className="h-3 w-3" />{criticality}
                             </span>
                           ) : (

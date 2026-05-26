@@ -18,7 +18,6 @@ export default function FrameworkPage() {
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>({
     domain: "",
-    priority: "",
     owner: "",
     status: "",
     evidenceReadiness: "",
@@ -28,19 +27,13 @@ export default function FrameworkPage() {
 
   const { overrides } = useOverrides();
 
-  const urlPriority = typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("priority") ?? ""
-    : "";
-
-  const activeFilters = { ...filters, priority: filters.priority || urlPriority };
-
   const filtered = useMemo(() => {
-    let result = filterControls(allControls, { ...activeFilters, search });
+    let result = filterControls(allControls, { ...filters, search }, overrides);
     if (criticalityFilter) {
       result = result.filter((ctrl) => overrides[ctrl.id]?.criticality === criticalityFilter);
     }
     return result;
-  }, [search, activeFilters, criticalityFilter, overrides]);
+  }, [search, filters, criticalityFilter, overrides]);
 
   const grouped = useMemo(() => {
     const map: Record<string, typeof allControls> = {};
@@ -51,12 +44,12 @@ export default function FrameworkPage() {
     return map;
   }, [filtered]);
 
-  const hasFilters = search || criticalityFilter || Object.values(activeFilters).some(Boolean);
+  const hasFilters = search || criticalityFilter || Object.values(filters).some(Boolean);
 
   const clearAll = () => {
     setSearch("");
     setCriticalityFilter("");
-    setFilters({ domain: "", priority: "", owner: "", status: "", evidenceReadiness: "" });
+    setFilters({ domain: "", owner: "", status: "", evidenceReadiness: "" });
   };
 
   return (

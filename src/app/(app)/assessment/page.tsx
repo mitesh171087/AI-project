@@ -10,21 +10,13 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
 import { allControls } from "@/data";
-import { exportToCSV, MATURITY_COLORS, cn } from "@/lib/utils";
+import { exportToCSV, MATURITY_COLORS, CRITICALITY_STYLES, cn } from "@/lib/utils";
 import { useOverrides } from "@/context/ControlOverridesContext";
 import {
   Download, TrendingUp, AlertTriangle, ChevronDown, ChevronUp,
-  Save, CheckCircle2, Clock, Flame,
+  Save, CheckCircle2, Clock, Flame, Printer, CalendarX,
 } from "lucide-react";
 import type { Control, MaturityLevel, ImplementationStatus, EvidenceStatus, AuditTrailEntry, Criticality } from "@/types";
-
-const CRITICALITY_STYLES: Record<Criticality, string> = {
-  Critical: "bg-red-100 text-red-700",
-  High: "bg-orange-100 text-orange-700",
-  Medium: "bg-yellow-100 text-yellow-700",
-  Low: "bg-green-100 text-green-700",
-  "Not Applicable": "bg-slate-100 text-slate-500",
-};
 
 interface DraftRow {
   currentMaturity: MaturityLevel;
@@ -58,15 +50,23 @@ function fieldLabel(key: string): string {
   return map[key] ?? key;
 }
 
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+
+function isOverdue(targetDate: string, status: ImplementationStatus) {
+  if (!targetDate || status === "Implemented") return false;
+  const d = new Date(targetDate);
+  return d < TODAY;
+}
+
 export default function AssessmentPage() {
   const { overrides, updateControl, getOverride } = useOverrides();
 
-  // draft: unsaved edits per control
   const [drafts, setDrafts] = useState<Record<string, Partial<DraftRow>>>({});
-  // note: pending audit note per control
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [savedFlash, setSavedFlash] = useState<string | null>(null);
+  const [showOverdueOnly, setShowOverdueOnly] = useState(false);
 
   const getSaved = useCallback((ctrl: Control): DraftRow => {
     const o = getOverride(ctrl.id);
@@ -153,11 +153,26 @@ export default function AssessmentPage() {
     [overrides, drafts]
   );
 
+  const assessedCount = useMemo(() =>
+    allControls.filter((c) => !!(getOverride(c.id)?.auditTrail?.length)),
+    [overrides]
+  ).length;
+
+  const overdueControls = useMemo(() =>
+    allControls.filter((c) => {
+      const row = getSaved(c);
+      return isOverdue(row.targetDate, row.implementationStatus);
+    }),
+    [overrides]
+  );
+
   const maturityDistribution = [1, 2, 3, 4, 5].map((level) => ({
     level: `L${level}`,
     count: allControls.filter((c) => getDraft(c).currentMaturity === level).length,
     fill: MATURITY_COLORS[level as MaturityLevel],
   }));
+
+  const displayControls = showOverdueOnly ? overdueControls : allControls;
 
   const handleExport = () => {
     exportToCSV(
@@ -183,27 +198,45 @@ export default function AssessmentPage() {
     );
   };
 
+  const handlePrint = () => window.print();
+
   return (
     <div className="flex flex-col">
       <AppHeader
         title="Maturity Assessment"
         subtitle={`${allControls.length} controls · Click a row to expand, edit, and save`}
         actions={
-          <Button variant="outline" size="sm" onClick={handleExport}>
-            <Download className="h-4 w-4" /> Export
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handlePrint} className="print:hidden">
+              <Printer className="h-4 w-4" /> Print Report
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleExport} className="print:hidden">
+              <Download className="h-4 w-4" /> Export CSV
+            </Button>
+          </div>
         }
       />
 
       <div className="p-6 flex flex-col gap-6">
         {/* Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-5">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Average Maturity</p>
               <p className="text-3xl font-bold text-slate-900 mt-1">L{avgCurrent}</p>
               <Progress value={(avgCurrent / 5) * 100} className="mt-3" />
               <p className="text-xs text-slate-400 mt-1">{avgCurrent} / 5.0</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5 flex flex-col gap-2">
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Assessment Progress</p>
+              <p className="text-3xl font-bold text-slate-900">{assessedCount}<span className="text-lg text-slate-400 font-normal"> / {allControls.length}</span></p>
+              <Progress
+                value={(assessedCount / allControls.length) * 100}
+                className="mt-1"
+              />
+              <p className="text-xs text-slate-400">controls assessed</p>
             </CardContent>
           </Card>
           <Card>
@@ -215,19 +248,49 @@ export default function AssessmentPage() {
               <p className="text-xs text-slate-400">controls below target</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card
+            className={cn(overdueControls.length > 0 ? "border-red-200 bg-red-50/30" : "")}
+          >
             <CardContent className="p-5 flex flex-col gap-2">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide flex items-center gap-1.5">
-                <TrendingUp className="h-3.5 w-3.5 text-red-500" /> Missing Evidence
+                <CalendarX className="h-3.5 w-3.5 text-red-500" /> Overdue
               </p>
-              <p className="text-3xl font-bold text-red-600">{missingCount}</p>
-              <p className="text-xs text-slate-400">controls need evidence</p>
+              <p className={cn("text-3xl font-bold", overdueControls.length > 0 ? "text-red-600" : "text-slate-400")}>
+                {overdueControls.length}
+              </p>
+              <p className="text-xs text-slate-400">remediation targets missed</p>
             </CardContent>
           </Card>
         </div>
 
+        {/* Overdue filter chip */}
+        {overdueControls.length > 0 && (
+          <div className="flex items-center gap-2 print:hidden">
+            <button
+              onClick={() => setShowOverdueOnly((v) => !v)}
+              className={cn(
+                "inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-colors",
+                showOverdueOnly
+                  ? "bg-red-100 text-red-700 border-red-300"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-red-200 hover:text-red-600"
+              )}
+            >
+              <CalendarX className="h-3.5 w-3.5" />
+              {showOverdueOnly ? `Showing ${overdueControls.length} overdue controls` : `Show overdue only (${overdueControls.length})`}
+            </button>
+            {showOverdueOnly && (
+              <button
+                onClick={() => setShowOverdueOnly(false)}
+                className="text-xs text-slate-400 hover:text-slate-600"
+              >
+                Show all
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Chart */}
-        <Card>
+        <Card className="print:hidden">
           <CardHeader><CardTitle>Maturity Distribution</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={180}>
@@ -247,8 +310,10 @@ export default function AssessmentPage() {
         {/* Assessment table */}
         <Card>
           <CardHeader>
-            <CardTitle>Control Assessment</CardTitle>
-            <p className="text-sm text-slate-500">
+            <CardTitle>
+              {showOverdueOnly ? `Overdue Controls (${overdueControls.length})` : "Control Assessment"}
+            </CardTitle>
+            <p className="text-sm text-slate-500 print:hidden">
               Change values inline, then expand a row and click Save to persist. Each save creates an audit trail entry.
             </p>
           </CardHeader>
@@ -264,11 +329,11 @@ export default function AssessmentPage() {
                     <th className="text-left p-3 text-xs font-medium text-slate-500 uppercase tracking-wide">Status</th>
                     <th className="text-left p-3 text-xs font-medium text-slate-500 uppercase tracking-wide">Evidence</th>
                     <th className="text-left p-3 text-xs font-medium text-slate-500 uppercase tracking-wide">Owner</th>
-                    <th className="text-left p-3 text-xs font-medium text-slate-500 uppercase tracking-wide w-20"></th>
+                    <th className="text-left p-3 text-xs font-medium text-slate-500 uppercase tracking-wide w-20 print:hidden"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {allControls.map((ctrl, i) => {
+                  {displayControls.map((ctrl, i) => {
                     const row = getDraft(ctrl);
                     const saved = getSaved(ctrl);
                     const isOpen = expandedId === ctrl.id;
@@ -277,6 +342,7 @@ export default function AssessmentPage() {
                     const criticality = getOverride(ctrl.id)?.criticality;
                     const auditTrail = getOverride(ctrl.id)?.auditTrail ?? [];
                     const hasGap = row.targetMaturity > row.currentMaturity;
+                    const overdue = isOverdue(saved.targetDate, saved.implementationStatus);
 
                     return (
                       <>
@@ -299,7 +365,7 @@ export default function AssessmentPage() {
                           </td>
                           <td className="p-3">
                             {criticality ? (
-                              <span className={cn("inline-flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded-full", CRITICALITY_STYLES[criticality])}>
+                              <span className={cn("inline-flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded-full", CRITICALITY_STYLES[criticality as Criticality])}>
                                 <Flame className="h-3 w-3" />{criticality}
                               </span>
                             ) : (
@@ -311,7 +377,7 @@ export default function AssessmentPage() {
                               value={row.currentMaturity}
                               onChange={(e) => { e.stopPropagation(); setDraftField(ctrl.id, "currentMaturity", Number(e.target.value) as MaturityLevel); }}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600"
+                              className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600 print:border-0 print:bg-transparent"
                             >
                               {[1, 2, 3, 4, 5].map((l) => <option key={l} value={l}>L{l}</option>)}
                             </select>
@@ -323,7 +389,7 @@ export default function AssessmentPage() {
                                 value={row.targetMaturity}
                                 onChange={(e) => { e.stopPropagation(); setDraftField(ctrl.id, "targetMaturity", Number(e.target.value) as MaturityLevel); }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600"
+                                className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600 print:border-0 print:bg-transparent"
                               >
                                 {[1, 2, 3, 4, 5].map((l) => <option key={l} value={l}>L{l}</option>)}
                               </select>
@@ -334,7 +400,7 @@ export default function AssessmentPage() {
                               value={row.implementationStatus}
                               onChange={(e) => { e.stopPropagation(); setDraftField(ctrl.id, "implementationStatus", e.target.value as ImplementationStatus); }}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600"
+                              className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600 print:border-0 print:bg-transparent"
                             >
                               {["Not Started", "In Progress", "Implemented", "Needs Review"].map((s) => <option key={s}>{s}</option>)}
                             </select>
@@ -344,13 +410,25 @@ export default function AssessmentPage() {
                               value={row.evidenceReadiness}
                               onChange={(e) => { e.stopPropagation(); setDraftField(ctrl.id, "evidenceReadiness", e.target.value as EvidenceStatus); }}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600"
+                              className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-green-600 print:border-0 print:bg-transparent"
                             >
                               {["Missing", "Partial", "Available", "Verified"].map((s) => <option key={s}>{s}</option>)}
                             </select>
                           </td>
-                          <td className="p-3 text-xs text-slate-600 max-w-[120px] truncate">{row.owner}</td>
                           <td className="p-3">
+                            <div className="flex flex-col gap-0.5">
+                              <span className="text-xs text-slate-600 max-w-[120px] truncate">{row.owner}</span>
+                              {row.targetDate && (
+                                <span className={cn(
+                                  "text-[10px]",
+                                  overdue ? "text-red-600 font-semibold" : "text-slate-400"
+                                )}>
+                                  {overdue && "⚠ "}{row.targetDate}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-3 print:hidden">
                             <div className="flex items-center gap-1.5">
                               {flashed && (
                                 <span className="text-xs text-green-600 font-medium flex items-center gap-1">
@@ -368,10 +446,9 @@ export default function AssessmentPage() {
                         </tr>
 
                         {isOpen && (
-                          <tr key={`${ctrl.id}-expand`}>
+                          <tr key={`${ctrl.id}-expand`} className="print:hidden">
                             <td colSpan={8} className="bg-emerald-50 border-b border-emerald-100 p-4">
                               <div className="flex flex-col gap-4">
-                                {/* Detail fields */}
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   <div className="flex flex-col gap-1">
                                     <label className="text-xs font-semibold text-slate-600">Key Gaps</label>
@@ -410,11 +487,15 @@ export default function AssessmentPage() {
                                         onChange={(e) => setDraftField(ctrl.id, "targetDate", e.target.value)}
                                         className="text-sm border border-slate-200 rounded p-2 bg-white focus:outline-none focus:ring-1 focus:ring-green-600"
                                       />
+                                      {overdue && (
+                                        <p className="text-xs text-red-600 flex items-center gap-1">
+                                          <CalendarX className="h-3 w-3" /> This target date has passed.
+                                        </p>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
 
-                                {/* Save section */}
                                 <div className="border-t border-emerald-200 pt-3 flex flex-col gap-2">
                                   <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                                     <Save className="h-3.5 w-3.5 text-green-700" />
@@ -445,7 +526,6 @@ export default function AssessmentPage() {
                                   )}
                                 </div>
 
-                                {/* Audit trail */}
                                 {auditTrail.length > 0 && (
                                   <div className="border-t border-emerald-200 pt-3">
                                     <p className="text-xs font-semibold text-slate-600 mb-2">Audit Trail</p>

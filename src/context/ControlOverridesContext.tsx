@@ -6,10 +6,13 @@ import type { AllOverrides, ControlOverride } from "@/types";
 interface ContextValue {
   overrides: AllOverrides;
   ready: boolean;
+  storageError: string | null;
+  dismissError: () => void;
   updateControl: (id: string, updates: Partial<ControlOverride>) => void;
   resetControl: (id: string) => void;
   getOverride: (id: string) => ControlOverride | undefined;
   isModified: (id: string) => boolean;
+  persist: (next: AllOverrides) => void;
 }
 
 const ControlOverridesContext = createContext<ContextValue | null>(null);

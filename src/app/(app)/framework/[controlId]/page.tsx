@@ -21,22 +21,16 @@ import { MATURITY_LABELS } from "@/lib/utils";
 import { useOverrides } from "@/context/ControlOverridesContext";
 import {
   ChevronLeft, ChevronRight, AlertTriangle, Info, Target, ShieldAlert,
-  Star, ExternalLink, Pencil, Save, RotateCcw, Check, Flame,
+  Star, ExternalLink, Pencil, Save, RotateCcw, Check, Flame, ClipboardList,
 } from "lucide-react";
 import type { MaturityLevel, Criticality, EvidenceItem, AuditQuestion, EvidenceStatus } from "@/types";
+import { CRITICALITY_STYLES } from "@/lib/utils";
 
 interface Props {
   params: Promise<{ controlId: string }>;
 }
 
 const CRITICALITY_OPTIONS: Criticality[] = ["Critical", "High", "Medium", "Low", "Not Applicable"];
-const CRITICALITY_STYLES: Record<Criticality, string> = {
-  "Critical": "bg-red-100 text-red-700 border border-red-200",
-  "High": "bg-orange-100 text-orange-700 border border-orange-200",
-  "Medium": "bg-yellow-100 text-yellow-700 border border-yellow-200",
-  "Low": "bg-green-100 text-green-700 border border-green-200",
-  "Not Applicable": "bg-slate-100 text-slate-500 border border-slate-200",
-};
 
 export default function ControlDetailPage({ params }: Props) {
   const { controlId } = use(params);
@@ -221,9 +215,9 @@ export default function ControlDetailPage({ params }: Props) {
 
               <div className="flex items-center gap-2 ml-auto">
                 <span className="text-xs text-slate-500">Current:</span>
-                <MaturityBadge level={control.currentMaturity} />
+                <MaturityBadge level={override?.currentMaturity ?? control.currentMaturity} />
                 <span className="text-xs text-slate-500">→ Target:</span>
-                <MaturityBadge level={control.targetMaturity} />
+                <MaturityBadge level={override?.targetMaturity ?? control.targetMaturity} />
               </div>
             </div>
           </CardContent>
@@ -297,17 +291,43 @@ export default function ControlDetailPage({ params }: Props) {
                   <CardContent className="flex flex-col gap-3 text-sm">
                     <Row label="Domain" value={control.domain} />
                     <Row label="Subdomain" value={control.subdomain} />
-                    <Row label="Primary Owner" value={control.primaryOwner} />
-                    <Row label="Priority" value={<PriorityBadge priority={control.priority} showLabel />} />
-                    <Row label="Current Maturity" value={<MaturityBadge level={control.currentMaturity} />} />
-                    <Row label="Target Maturity" value={<MaturityBadge level={control.targetMaturity} />} />
-                    <Row label="Status" value={<StatusBadge status={control.implementationStatus} />} />
-                    <Row label="Evidence" value={<EvidenceBadge status={control.evidenceReadiness} />} />
                     {criticality && (
                       <Row label="Criticality" value={
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${CRITICALITY_STYLES[criticality]}`}>{criticality}</span>
                       } />
                     )}
+                  </CardContent>
+                </Card>
+
+                {/* Assessment Status (reads from saved overrides) */}
+                <Card className="border-emerald-100 bg-emerald-50/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-emerald-800 text-sm">
+                      <ClipboardList className="h-4 w-4" />Your Assessment
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-3 text-sm">
+                    <Row label="Current Maturity" value={<MaturityBadge level={override?.currentMaturity ?? control.currentMaturity} />} />
+                    <Row label="Target Maturity" value={<MaturityBadge level={override?.targetMaturity ?? control.targetMaturity} />} />
+                    <Row label="Status" value={<StatusBadge status={override?.implementationStatus ?? control.implementationStatus} />} />
+                    <Row label="Evidence" value={<EvidenceBadge status={override?.evidenceReadiness ?? control.evidenceReadiness} />} />
+                    {(override?.owner ?? control.primaryOwner) && (
+                      <Row label="Owner" value={override?.owner ?? control.primaryOwner} />
+                    )}
+                    {override?.targetDate && (
+                      <Row label="Target Date" value={
+                        <span className={new Date(override.targetDate) < new Date() && (override?.implementationStatus ?? control.implementationStatus) !== "Implemented" ? "text-red-600 font-medium" : ""}>
+                          {override.targetDate}
+                          {new Date(override.targetDate) < new Date() && (override?.implementationStatus ?? control.implementationStatus) !== "Implemented" && " ⚠ Overdue"}
+                        </span>
+                      } />
+                    )}
+                    {override?.keyGaps && (
+                      <Row label="Key Gaps" value={<span className="text-slate-600 text-xs">{override.keyGaps}</span>} />
+                    )}
+                    <Link href="/assessment" className="text-xs text-emerald-700 hover:underline font-medium mt-1">
+                      Edit in Assessment →
+                    </Link>
                   </CardContent>
                 </Card>
 
@@ -462,6 +482,7 @@ export default function ControlDetailPage({ params }: Props) {
                             <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase">Description</th>
                             <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase w-36">Status</th>
                             <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase w-24">Type</th>
+                            <th className="text-left px-4 py-2 text-xs text-slate-500 font-semibold uppercase w-44">Document URL</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -494,6 +515,15 @@ export default function ControlDetailPage({ params }: Props) {
                               </td>
                               <td className="px-4 py-2">
                                 <span className="text-xs text-slate-500">{ev.type}</span>
+                              </td>
+                              <td className="px-4 py-2">
+                                <input
+                                  type="url"
+                                  className="w-full text-xs border border-slate-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                  value={ev.documentUrl ?? ""}
+                                  placeholder="https://…"
+                                  onChange={(e) => updateEditEvidence(i, "documentUrl", e.target.value)}
+                                />
                               </td>
                             </tr>
                           ))}

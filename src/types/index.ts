@@ -106,6 +106,7 @@ export interface EvidenceItem {
   updateFrequency: string;
   maturityLevelSupported: MaturityLevel;
   status: EvidenceStatus;
+  documentUrl?: string;
   controlId?: string;
   domain?: string;
 }
@@ -247,6 +248,9 @@ export interface ControlOverride {
 
   // Audit trail (one entry per save)
   auditTrail?: AuditTrailEntry[];
+
+  // Roadmap completion tracking (itemId → completed)
+  roadmapCompletions?: Record<string, boolean>;
 }
 
 export type AllOverrides = Record<string, ControlOverride>;

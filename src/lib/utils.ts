@@ -5,9 +5,9 @@ import type {
   Priority,
   ImplementationStatus,
   EvidenceStatus,
+  Criticality,
   Control,
-  AssessmentRecord,
-  DashboardStats,
+  AllOverrides,
 } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -70,6 +70,16 @@ export const EVIDENCE_COLORS: Record<EvidenceStatus, string> = {
   Verified: "bg-green-100 text-green-700",
 };
 
+// ─── Criticality styles (single source of truth) ────────────────────────────
+
+export const CRITICALITY_STYLES: Record<Criticality, string> = {
+  Critical: "bg-red-100 text-red-700 border border-red-200",
+  High: "bg-orange-100 text-orange-700 border border-orange-200",
+  Medium: "bg-yellow-100 text-yellow-700 border border-yellow-200",
+  Low: "bg-green-100 text-green-700 border border-green-200",
+  "Not Applicable": "bg-slate-100 text-slate-500 border border-slate-200",
+};
+
 // ─── Domain colours (for heatmap / tags) ────────────────────────────────────
 
 export const DOMAIN_COLORS: Record<string, string> = {
@@ -103,79 +113,32 @@ export function exportToCSV(data: Record<string, unknown>[], filename: string) {
   URL.revokeObjectURL(url);
 }
 
-// ─── Dashboard Stats ─────────────────────────────────────────────────────────
-
-export function computeDashboardStats(
-  controls: Control[],
-  assessments: AssessmentRecord[]
-): DashboardStats {
-  const assessmentMap = new Map(assessments.map((a) => [a.controlId, a]));
-
-  const byPriority: Record<Priority, number> = { P1: 0, P2: 0, P3: 0 };
-  const byStatus: Record<ImplementationStatus, number> = {
-    "Not Started": 0,
-    "In Progress": 0,
-    Implemented: 0,
-    "Needs Review": 0,
-  };
-  const byEvidenceReadiness: Record<EvidenceStatus, number> = {
-    Missing: 0,
-    Partial: 0,
-    Available: 0,
-    Verified: 0,
-  };
-  const byOwner: Record<string, number> = {};
-  let maturitySum = 0;
-
-  for (const ctrl of controls) {
-    const assessment = assessmentMap.get(ctrl.id);
-    byPriority[ctrl.priority]++;
-    const status = assessment?.implementationStatus ?? ctrl.implementationStatus;
-    byStatus[status]++;
-    const evidence = assessment?.evidenceReadiness ?? ctrl.evidenceReadiness;
-    byEvidenceReadiness[evidence]++;
-    byOwner[ctrl.primaryOwner] = (byOwner[ctrl.primaryOwner] ?? 0) + 1;
-    maturitySum += assessment?.currentMaturity ?? ctrl.currentMaturity;
-  }
-
-  const domains = new Set(controls.map((c) => c.domain));
-  const subdomains = new Set(controls.map((c) => c.subdomain));
-
-  return {
-    totalDomains: domains.size,
-    totalSubdomains: subdomains.size,
-    totalControls: controls.length,
-    byPriority,
-    byStatus,
-    byEvidenceReadiness,
-    byOwner,
-    averageMaturity: controls.length
-      ? Math.round((maturitySum / controls.length) * 10) / 10
-      : 0,
-  };
-}
-
 // ─── Filter & search helpers ─────────────────────────────────────────────────
 
 export function filterControls(
   controls: Control[],
   filters: {
     domain?: string;
-    priority?: string;
     owner?: string;
     status?: string;
     evidenceReadiness?: string;
     maturity?: string;
     search?: string;
-  }
+  },
+  overrides: AllOverrides = {}
 ): Control[] {
   return controls.filter((ctrl) => {
+    const o = overrides[ctrl.id];
+    const effectiveStatus = o?.implementationStatus ?? ctrl.implementationStatus;
+    const effectiveEvidence = o?.evidenceReadiness ?? ctrl.evidenceReadiness;
+    const effectiveOwner = o?.owner ?? ctrl.primaryOwner;
+    const effectiveTargetMaturity = o?.targetMaturity ?? ctrl.targetMaturity;
+
     if (filters.domain && ctrl.domain !== filters.domain) return false;
-    if (filters.priority && ctrl.priority !== filters.priority) return false;
-    if (filters.owner && ctrl.primaryOwner !== filters.owner) return false;
-    if (filters.status && ctrl.implementationStatus !== filters.status) return false;
-    if (filters.evidenceReadiness && ctrl.evidenceReadiness !== filters.evidenceReadiness) return false;
-    if (filters.maturity && ctrl.targetMaturity !== Number(filters.maturity)) return false;
+    if (filters.owner && effectiveOwner !== filters.owner) return false;
+    if (filters.status && effectiveStatus !== filters.status) return false;
+    if (filters.evidenceReadiness && effectiveEvidence !== filters.evidenceReadiness) return false;
+    if (filters.maturity && effectiveTargetMaturity !== Number(filters.maturity)) return false;
 
     if (filters.search) {
       const q = filters.search.toLowerCase();
@@ -201,14 +164,24 @@ export function filterControls(
   });
 }
 
-export function getMaturityGapControls(controls: Control[]): Control[] {
-  return controls.filter(
-    (c) => c.targetMaturity > c.currentMaturity
-  );
+// ─── Maturity gap helpers (use override values when available) ───────────────
+
+export function getMaturityGapControls(controls: Control[], overrides: AllOverrides = {}): Control[] {
+  return controls.filter((c) => {
+    const current = overrides[c.id]?.currentMaturity ?? c.currentMaturity;
+    const target = overrides[c.id]?.targetMaturity ?? c.targetMaturity;
+    return target > current;
+  });
 }
 
-export function getMissingEvidenceControls(controls: Control[]): Control[] {
-  return controls.filter(
-    (c) => c.evidenceReadiness === "Missing" || c.evidenceReadiness === "Partial"
-  );
+// ─── Compliance score (% of controls at or above target maturity) ────────────
+
+export function getComplianceScore(controls: Control[], overrides: AllOverrides = {}): number {
+  if (!controls.length) return 0;
+  const compliant = controls.filter((c) => {
+    const current = overrides[c.id]?.currentMaturity ?? c.currentMaturity;
+    const target = overrides[c.id]?.targetMaturity ?? c.targetMaturity;
+    return current >= target;
+  }).length;
+  return Math.round((compliant / controls.length) * 100);
 }

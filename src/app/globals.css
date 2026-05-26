@@ -61,3 +61,43 @@ body {
   filter: brightness(0.9);
   transform: scale(1.04);
 }
+
+/* ─── Print styles (Assessment Report) ─────────────────────────── */
+@media print {
+  /* Hide sidebar, header chrome, and interactive controls */
+  nav, aside, .print\:hidden { display: none !important; }
+
+  /* Remove the left margin added by the sidebar */
+  main { margin-left: 0 !important; }
+
+  body { background: white; font-size: 11px; }
+
+  /* Add report header before the page content */
+  main::before {
+    content: "SAMA ITGF Compliance Assessment Report";
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #006B3F;
+    border-bottom: 2px solid #006B3F;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  /* Cards: no shadows, tight borders */
+  .rounded-lg, .rounded-xl { border-radius: 4px !important; }
+  [class*="shadow"] { box-shadow: none !important; }
+
+  /* Table: keep it readable */
+  table { page-break-inside: auto; font-size: 10px; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+  thead { display: table-header-group; }
+
+  /* Force page break between major sections */
+  .page-break-before { page-break-before: always; }
+
+  @page {
+    size: A4 landscape;
+    margin: 15mm 12mm;
+  }
+}

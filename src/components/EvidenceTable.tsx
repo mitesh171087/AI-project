@@ -3,7 +3,7 @@ import { useState } from "react";
 import { EvidenceBadge } from "@/components/StatusBadge";
 import { MaturityBadge } from "@/components/MaturityBadge";
 import { Button } from "@/components/ui/button";
-import { Download, FileText } from "lucide-react";
+import { Download, FileText, ExternalLink } from "lucide-react";
 import { exportToCSV } from "@/lib/utils";
 import type { EvidenceItem, EvidenceStatus } from "@/types";
 
@@ -22,10 +22,12 @@ interface EvidenceTableProps {
   items: EvidenceItem[];
   showControlColumn?: boolean;
   onStatusChange?: (id: string, status: EvidenceStatus) => void;
+  onUrlChange?: (id: string, url: string) => void;
+  editMode?: boolean;
   exportFilename?: string;
 }
 
-export function EvidenceTable({ items, showControlColumn = false, onStatusChange, exportFilename = "evidence.csv" }: EvidenceTableProps) {
+export function EvidenceTable({ items, showControlColumn = false, onStatusChange, onUrlChange, editMode = false, exportFilename = "evidence.csv" }: EvidenceTableProps) {
   const [statuses, setStatuses] = useState<Record<string, EvidenceStatus>>({});
 
   const getStatus = (item: EvidenceItem) => statuses[item.id] ?? item.status;
@@ -45,6 +47,7 @@ export function EvidenceTable({ items, showControlColumn = false, onStatusChange
         Frequency: ev.updateFrequency,
         "Maturity Level": ev.maturityLevelSupported,
         Status: getStatus(ev),
+        "Document URL": ev.documentUrl ?? "",
         ...(showControlColumn ? { "Control ID": ev.controlId ?? "" } : {}),
       })),
       exportFilename
@@ -68,6 +71,7 @@ export function EvidenceTable({ items, showControlColumn = false, onStatusChange
               <th className="text-left p-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Frequency</th>
               <th className="text-left p-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Maturity</th>
               <th className="text-left p-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Status</th>
+              <th className="text-left p-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Link</th>
             </tr>
           </thead>
           <tbody>
@@ -102,6 +106,28 @@ export function EvidenceTable({ items, showControlColumn = false, onStatusChange
                       <option key={s} value={s}>{s}</option>
                     ))}
                   </select>
+                </td>
+                <td className="p-3">
+                  {editMode && onUrlChange ? (
+                    <input
+                      type="url"
+                      value={ev.documentUrl ?? ""}
+                      onChange={(e) => onUrlChange(ev.id, e.target.value)}
+                      placeholder="https://…"
+                      className="text-xs border border-slate-200 rounded px-2 py-1 w-36 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  ) : ev.documentUrl ? (
+                    <a
+                      href={ev.documentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" /> Open
+                    </a>
+                  ) : (
+                    <span className="text-xs text-slate-300">—</span>
+                  )}
                 </td>
               </tr>
             ))}

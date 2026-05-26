@@ -5,7 +5,6 @@ import { X } from "lucide-react";
 
 export interface FilterState {
   domain: string;
-  priority: string;
   owner: string;
   status: string;
   evidenceReadiness: string;
@@ -50,13 +49,12 @@ export function FilterPanel({ filters, onChange, domains, owners }: FilterPanelP
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Filters</span>
         {hasActive && (
-          <Button variant="ghost" size="sm" onClick={() => onChange({ domain: "", priority: "", owner: "", status: "", evidenceReadiness: "" })}>
+          <Button variant="ghost" size="sm" onClick={() => onChange({ domain: "", owner: "", status: "", evidenceReadiness: "" })}>
             <X className="h-3 w-3 mr-1" /> Clear
           </Button>
         )}
       </div>
       <Sel label="Domain" value={filters.domain || EMPTY} options={domains} onValueChange={(v) => set("domain", v)} />
-      <Sel label="Priority" value={filters.priority || EMPTY} options={["P1", "P2", "P3"]} onValueChange={(v) => set("priority", v)} />
       <Sel label="Owner" value={filters.owner || EMPTY} options={owners} onValueChange={(v) => set("owner", v)} />
       <Sel label="Status" value={filters.status || EMPTY} options={["Not Started", "In Progress", "Implemented", "Needs Review"]} onValueChange={(v) => set("status", v)} />
       <Sel label="Evidence" value={filters.evidenceReadiness || EMPTY} options={["Missing", "Partial", "Available", "Verified"]} onValueChange={(v) => set("evidenceReadiness", v)} />
