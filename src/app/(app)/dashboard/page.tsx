@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -155,7 +155,7 @@ export default function DashboardPage() {
         subtitle="SAMA ITGF compliance posture · Data reflects your saved assessments"
         actions={
           <Button asChild size="sm">
-            <Link href="/assessment">
+            <Link to="/assessment">
               Go to Assessment <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -210,7 +210,7 @@ export default function DashboardPage() {
           ].map(({ label, count, icon, color, bg }) => (
             <DashboardMetricCard key={label} title={label} value={count} icon={icon} iconColor={color} iconBg={bg} />
           ))}
-          <Link href="/assessment?filter=overdue">
+          <Link to="/assessment?filter=overdue">
             <DashboardMetricCard
               title="Overdue"
               value={overdueCount}
@@ -258,7 +258,7 @@ export default function DashboardPage() {
                   <p className="text-sm text-center text-slate-500">
                     No criticality set yet.
                   </p>
-                  <Link href="/framework">
+                  <Link to="/framework">
                     <Button variant="outline" size="sm" className="text-xs">
                       Set criticality in Framework Explorer →
                     </Button>
@@ -321,7 +321,7 @@ export default function DashboardPage() {
                           if (!ctrl) return null;
                           const eff = getEffective(ctrl);
                           return (
-                            <Link key={cid} href={`/framework/${cid}`}>
+                            <Link key={cid} to={`/framework/${cid}`}>
                               <div
                                 className={cn(
                                   "heatmap-cell w-11 h-9 rounded flex flex-col items-center justify-center text-white text-center",
@@ -355,7 +355,7 @@ export default function DashboardPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Top Maturity Gaps</CardTitle>
-                <Link href="/assessment" className="text-xs font-medium hover:underline" style={{ color: "#006B3F" }}>
+                <Link to="/assessment" className="text-xs font-medium hover:underline" style={{ color: "#006B3F" }}>
                   View all →
                 </Link>
               </div>
@@ -369,7 +369,7 @@ export default function DashboardPage() {
                     const eff = getEffective(ctrl);
                     const criticality = eff.criticality;
                     return (
-                      <Link key={ctrl.id} href={`/framework/${ctrl.id}`} className="flex items-center justify-between py-3 hover:bg-slate-50 -mx-2 px-2 rounded transition-colors">
+                      <Link key={ctrl.id} to={`/framework/${ctrl.id}`} className="flex items-center justify-between py-3 hover:bg-slate-50 -mx-2 px-2 rounded transition-colors">
                         <div className="flex items-center gap-3">
                           {criticality ? (
                             <span className={cn("text-xs font-medium px-1.5 py-0.5 rounded-full flex items-center gap-0.5", CRITICALITY_STYLES[criticality])}>
@@ -408,7 +408,7 @@ export default function DashboardPage() {
                 { href: "/evidence", label: "Evidence Library", icon: BookOpen, color: "text-green-600", desc: "Review missing evidence" },
                 { href: "/roadmap", label: "Remediation Roadmap", icon: TrendingUp, color: "text-blue-600", desc: "Plan your implementation" },
               ].map(({ href, label, icon: Icon, color, desc }) => (
-                <Link key={href} href={href}>
+                <Link key={href} to={href}>
                   <div className="flex flex-col gap-2 p-4 rounded-lg border border-slate-100 hover:border-green-200 hover:shadow-sm transition-all bg-white h-full">
                     <Icon className={cn("h-5 w-5", color)} />
                     <p className="text-sm font-semibold text-slate-900">{label}</p>

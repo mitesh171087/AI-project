@@ -1,7 +1,6 @@
 "use client";
-import { use, useState, useEffect } from "react";
-import { notFound } from "next/navigation";
-import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,16 +25,12 @@ import {
 import type { MaturityLevel, Criticality, EvidenceItem, AuditQuestion, EvidenceStatus } from "@/types";
 import { CRITICALITY_STYLES } from "@/lib/utils";
 
-interface Props {
-  params: Promise<{ controlId: string }>;
-}
-
 const CRITICALITY_OPTIONS: Criticality[] = ["Critical", "High", "Medium", "Low", "Not Applicable"];
 
-export default function ControlDetailPage({ params }: Props) {
-  const { controlId } = use(params);
-  const control = getControlById(controlId);
-  if (!control) notFound();
+export default function ControlDetailPage() {
+  const { controlId } = useParams<{ controlId: string }>();
+  const control = getControlById(controlId ?? "");
+  if (!control) return <div className="p-8 text-slate-500">Control not found.</div>;
 
   const { getOverride, updateControl, resetControl, isModified } = useOverrides();
   const override = getOverride(control.id);

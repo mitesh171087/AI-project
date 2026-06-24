@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -190,7 +190,7 @@ export default function AdminPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>{selectedCtrl.controlNumber} – {selectedCtrl.title}</CardTitle>
-                <Link href={`/framework/${selectedCtrl.id}`}>
+                <Link to={`/framework/${selectedCtrl.id}`}>
                   <Button variant="outline" size="sm">
                     <ExternalLink className="h-4 w-4" /> View
                   </Button>

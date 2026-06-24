@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowRight, AlertTriangle, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { MaturityBadge } from "@/components/MaturityBadge";
@@ -29,7 +29,7 @@ export function ControlCard({ control, compact = false }: ControlCardProps) {
   const criticality = override?.criticality;
 
   return (
-    <Link href={`/framework/${control.id}`}>
+    <Link to={`/framework/${control.id}`}>
       <Card className="hover:shadow-md hover:border-green-200 transition-all cursor-pointer group h-full">
         <CardContent className="p-4 flex flex-col gap-3 h-full">
           <div className="flex items-start justify-between gap-2">

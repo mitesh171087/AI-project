@@ -1,7 +1,6 @@
 "use client";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
+import deloitteLogo from "@/assets/deloitte-logo.png";
 import {
   LayoutDashboard,
   FolderTree,
@@ -28,7 +27,7 @@ const NAV_ITEMS = [
 ];
 
 export function AppSidebar() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex flex-col w-64 overflow-hidden" style={{ backgroundColor: "#003d24" }}>
@@ -51,7 +50,7 @@ export function AppSidebar() {
             return (
               <Link
                 key={href}
-                href={href}
+                to={href}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors group",
                   isActive
@@ -81,8 +80,8 @@ export function AppSidebar() {
       {/* Deloitte branding footer */}
       <div className="px-5 py-4 border-t" style={{ borderColor: "#005230" }}>
         <div className="flex items-center gap-2 mb-2">
-          <Image
-            src="/deloitte-logo.png"
+          <img
+            src={deloitteLogo}
             alt="Deloitte"
             width={80}
             height={45}
